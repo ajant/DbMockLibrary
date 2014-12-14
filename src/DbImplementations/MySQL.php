@@ -100,7 +100,7 @@ class MySQL extends AbstractMockLibrary
      * @throws DbOperationFailedException
      * @return void
      */
-    public function insert($collection, $id)
+    protected function insert($collection, $id)
     {
         $data    = $this->data[$collection][$id];
         $columns = array_map(function ($value) {
@@ -123,7 +123,7 @@ class MySQL extends AbstractMockLibrary
      * @throws DbOperationFailedException
      * @return void
      */
-    public function delete($collection, $id)
+    protected function delete($collection, $id)
     {
         $query      = 'DELETE FROM ' . $collection . ' WHERE ';
         $conditions = [];

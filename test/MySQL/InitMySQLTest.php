@@ -50,7 +50,7 @@ class InitTest extends \Test\TestCase
         $staticProperties = $reflection->getStaticProperties();
 
         // test
-        $this->assertInstanceOf('\DbMockLibrary\MockLibrary', $staticProperties['instance']);
+        $this->assertInstanceOf('\DbMockLibrary\DbImplementations\MySQL', $staticProperties['instance']);
         $this->assertEquals($dataArray, $staticProperties['initialData']);
 
         // prepare

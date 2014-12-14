@@ -10,70 +10,84 @@ use UnexpectedValueException;
 
 class Mongo extends AbstractMockLibrary
 {
+    /**
+     * @var Mongo $instance
+     */
+    protected static $instance;
 
     /**
-     * @param array  $initialData
-     * @param string $serverName
-     * @param string $database
-     * @param string $username
-     * @param string $password
+     * @var \MongoDB $database
+     */
+    protected $database;
+
+    /**
+     * @param array $initialData
      *
      * @throws AlreadyInitializedException
+     * @throws UnexpectedValueException
      * @return void
      */
-    public static function init(array $initialData, $serverName, $database, $username, $password)
+    public static function initMongo(array $initialData, $database)
     {
         if (!self::$instance) {
-            if (empty($serverName) || !is_string($serverName)) {
-                throw new UnexpectedValueException('Invalid server name');
-            }
             if (empty($database) || !is_string($database)) {
                 throw new UnexpectedValueException('Invalid database name');
             }
-            if (empty($username) || !is_string($username)) {
-                throw new UnexpectedValueException('Invalid username');
-            }
-            if (!is_string($password)) {
-                throw new UnexpectedValueException('Invalid password');
-            }
             if (!SimpleArrayLibrary::isAssociative($initialData) && !empty($initialData)) {
-                throw new UnexpectedValueException('Invalid table names');
+                throw new UnexpectedValueException('Invalid collection names');
             }
 
-            self::$instance              = new self();
-            self::$instance->data        = self::$initialData = $initialData;
+            self::$instance             = new self();
+            self::$instance->data       = self::$initialData = $initialData;
+            $client = new \MongoClient();
+            self::$instance->database = $client->selectDB($database);
 
             // edit $data array where needed
             self::$instance->update();
         } else {
-            throw new AlreadyInitializedException('MySQL library already initialized');
+            throw new AlreadyInitializedException('Mongo library already initialized');
         }
     }
+
+    /**
+     * @return Mongo
+     */
+    public static function getInstance()
+    {
+        return self::$instance;
+    }
+
     /**
      * Insert into database
      *
-     * @param string $collection
+     * @param string $collectionName
      * @param string $id
      *
+     * @throws DbOperationFailedException
      * @return mixed
      */
-    protected function insert($collection, $id)
+    protected function insert($collectionName, $id)
     {
-        // TODO: Implement insert() method.
+        $collection = self::$instance->database->selectCollection($collectionName);
+        if (!$collection->insert($this->data[$collectionName][$id], ['w' => 1])) {
+            throw new DbOperationFailedException('Insert failed');
+        }
     }
 
     /**
      * Delete from database
      *
-     * @param string $collection
-     * @param array  $id
+     * @param string $collectionName
+     * @param string $id
      *
-     * @internal param array $data
-     *
+     * @throws DbOperationFailedException
      * @return void
      */
-    protected function delete($collection, $id)
+    protected function delete($collectionName, $id)
     {
-        // TODO: Implement delete() method.
+        $collection = self::$instance->database->selectCollection($collectionName);
+        if (!$collection->remove(['_id' => $this->data[$collectionName][$id]['_id']], ['w' => 1])) {
+            throw new DbOperationFailedException('Delete failed');
+        }
     }
 }

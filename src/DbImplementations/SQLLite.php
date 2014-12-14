@@ -2,6 +2,9 @@
 
 namespace DbMockLibrary\DbImplementations;
 
+use DbMockLibrary\AbstractMockLibrary;
+use DbMockLibrary\Exceptions\DbOperationFailedException;
+
 class SQLLite extends AbstractMockLibrary
 {
     /**
@@ -22,7 +25,7 @@ class SQLLite extends AbstractMockLibrary
      * Delete from database
      *
      * @param string $collection
-     * @param array  $id
+     * @param string $id
      *
      * @internal param array $data
      *

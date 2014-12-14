@@ -53,12 +53,15 @@ class DeleteTest extends \Test\TestCase
         $stmt = $this->pdo->prepare('SELECT * FROM `DbMockLibraryTest`.testTable WHERE `id` = 0');
         $stmt->execute();
         $result = $stmt->fetchAll();
+        $reflection = new \ReflectionClass(MySQL::getInstance());
+        $deleteMethod = $reflection->getMethod('delete');
+        $deleteMethod->setAccessible(true);
 
         // test
         $this->assertCount(1, $result);
 
         // invoke logic
-        MySQL::getInstance()->delete('testTable', 1);
+        $deleteMethod->invoke(MySQL::getInstance(), 'testTable', 1);
 
         // prepare
         $stmt->execute();

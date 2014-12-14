@@ -48,12 +48,15 @@ class InsertTest extends \Test\TestCase
         $stmt = $this->pdo->prepare('SELECT * FROM `DbMockLibraryTest`.testTable WHERE `id` = 0');
         $stmt->execute();
         $result = $stmt->fetchAll();
+        $reflection = new \ReflectionClass(MySQL::getInstance());
+        $insertMethod = $reflection->getMethod('insert');
+        $insertMethod->setAccessible(true);
 
         // test
         $this->assertCount(0, $result);
 
         // invoke logic
-        MySQL::getInstance()->insert('testTable', 1);
+        $insertMethod->invoke(MySQL::getInstance(), 'testTable', 1);
 
         // prepare
         $stmt->execute();
