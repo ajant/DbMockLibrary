@@ -1,0 +1,11 @@
+<!DOCTYPE phpunit>
+<phpunit>
+	<testsuite name="All Tests">
+		<directory>.</directory>
+	</testsuite>
+	<filter>
+		<whitelist>
+			<directory suffix=".php">./</directory>
+		</whitelist>
+	</filter>
+</phpunit>

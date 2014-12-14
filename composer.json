@@ -1,0 +1,21 @@
+{
+	"name": "ajant/db-mock-library",
+	"description": "Db mocking & stabbing library",
+	"authors": [
+		{
+			"name": "Jovanovic Aleksandar",
+			"email": "jovanovic.aleksandar.83@gmail.com"
+		}
+	],
+	"require": {
+		"php": ">=5.4.0",
+		"phpunit/phpunit": "4.*",
+		"coa/simple-array-library": "*"
+	},
+	"autoload": {
+		"psr-4": {
+			"DbMockLibrary\\": "src",
+			"Test\\": "test"
+		}
+	}
+}
