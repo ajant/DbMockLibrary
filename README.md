@@ -5,11 +5,14 @@ DbMockLibrary
 Db mocking & dummy data management library
 
 This is a database stubbing/mocking/prototyping library. Its principal uses are meant to be:
+
 1. testing the application without using actual database (by mocking data persistence layer, using DbMockLibrary)
 
 2. quick prototyping, while delaying the writing of any database specific code (again by mocking data persistence layer, using DbMockLibrary)
 
 3. dummy data management during development phase
+
+Description:
 
 1. If data persistence code is kept separate from business logic code, in a different layer of the application, then data persistence layer can
 be mocked using DbMockLibrary during testing. That way objects that work with data persistence layer can be tested, without actually using a
