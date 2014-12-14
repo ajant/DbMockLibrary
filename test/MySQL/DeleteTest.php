@@ -39,7 +39,9 @@ class DeleteTest extends \Test\TestCase
         $stmt = $this->pdo->prepare('DELETE FROM DbMockLibraryTest.testTable WHERE `id` = 0');
         $stmt->execute();
 
-        MySQL::getInstance()->destroy();
+        if (MySQL::getInstance()) {
+            MySQL::getInstance()->destroy();
+        }
     }
 
     /**
