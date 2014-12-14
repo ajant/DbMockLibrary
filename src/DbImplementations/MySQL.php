@@ -36,7 +36,7 @@ class MySQL extends AbstractMockLibrary
      * @throws AlreadyInitializedException
      * @return void
      */
-    public static function init(array $initialData, $serverName, $database, $username, $password)
+    public static function initMySQL(array $initialData, $serverName, $database, $username, $password)
     {
         if (!self::$instance) {
             if (empty($serverName) || !is_string($serverName)) {

@@ -43,7 +43,7 @@ class InitTest extends \Test\TestCase
         $dataArray = ['testTable' => [1 => ['foo' => 1, 'id' => 1]]];
 
         // invoke logic
-        MySQL::init($dataArray, 'localhost', 'DbMockLibraryTest', 'root', '');
+        MySQL::initMySQL($dataArray, 'localhost', 'DbMockLibraryTest', 'root', '');
 
         // prepare
         $reflection = new \ReflectionClass('\DbMockLibrary\DbImplementations\MySQL');

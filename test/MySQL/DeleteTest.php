@@ -28,7 +28,7 @@ class DeleteTest extends \Test\TestCase
         $stmt = $this->pdo->prepare('INSERT INTO DbMockLibraryTest.testTable (`id`, `foo`) VALUES (0, 0)');
         $stmt->execute();
 
-        MySQL::init(['testTable' => [1 => ['foo' => 0, 'id' => 0]]], 'localhost', 'DbMockLibraryTest', 'root', '');
+        MySQL::initMySQL(['testTable' => [1 => ['foo' => 0, 'id' => 0]]], 'localhost', 'DbMockLibraryTest', 'root', '');
     }
 
     public function tearDown()

@@ -49,9 +49,9 @@ class InitXTest extends \Test\TestCase
         $this->setExpectedException($data['exception'], $data['errorMessage']);
 
         // invoke logic
-        MySQL::init($data['initialData'], $data['serverName'], $data['database'], $data['username'], $data['password']);
+        MySQL::initMySQL($data['initialData'], $data['serverName'], $data['database'], $data['username'], $data['password']);
         if (isset($data['initTwice'])) {
-            MySQL::init($data['initialData'], $data['serverName'], $data['database'], $data['username'], $data['password']);
+            MySQL::initMySQL($data['initialData'], $data['serverName'], $data['database'], $data['username'], $data['password']);
         }
     }
 
