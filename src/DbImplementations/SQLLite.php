@@ -2,10 +2,10 @@
 
 namespace DbMockLibrary\DbImplementations;
 
-use DbMockLibrary\AbstractMockLibrary;
+use DbMockLibrary\AbstractImplementation;
 use DbMockLibrary\Exceptions\DbOperationFailedException;
 
-class SQLLite extends AbstractMockLibrary
+class SQLLite extends AbstractImplementation
 {
     /**
      * Insert into database

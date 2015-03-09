@@ -2,20 +2,28 @@
 
 namespace Test;
 
-use DbMockLibrary\MockLibrary;
-
 class TestCase extends \PHPUnit_Framework_TestCase
 {
     public function tearDown()
     {
         parent::tearDown();
 
-        $reflection = new \ReflectionClass('\DbMockLibrary\MockLibrary');
-        $staticProperties = $reflection->getStaticProperties();
+        $reflections =  [
+            new \ReflectionClass('\DbMockLibrary\MockLibrary'),
+            new \ReflectionClass('\DbMockLibrary\Base'),
+            new \ReflectionClass('\DbMockLibrary\MockMethodCalls'),
+            new \ReflectionClass('\DbMockLibrary\DataContainer')
+        ];
 
-        if (!is_null($staticProperties['instance'])) {
-            // has to be used because f the bug/feature with getStaticProperty method
-            MockLibrary::getInstance()->destroy();
+        /* @var $reflection \ReflectionClass */
+        foreach ($reflections as $reflection) {
+            $staticProperties = $reflection->getStaticProperties();
+            if (!is_null($staticProperties['instance'])) {
+                // destroy has to be used because of the bug/feature with getStaticProperty method
+                $getInstanceMethod = $reflection->getMethod('getInstance');
+                $destroy = 'destroy';
+                $getInstanceMethod->invoke($reflection)->$destroy();
+            }
         }
     }
 } 

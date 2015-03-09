@@ -2,10 +2,10 @@
 
 namespace DbMockLibrary\DbImplementations;
 
-use DbMockLibrary\AbstractMockLibrary;
+use DbMockLibrary\AbstractImplementation;
 use DbMockLibrary\Exceptions\DbOperationFailedException;
 
-class PostgreSQL extends AbstractMockLibrary
+class PostgreSQL extends AbstractImplementation
 {
     /**
      * Insert into database

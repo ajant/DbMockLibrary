@@ -4,11 +4,11 @@ namespace DbMockLibrary\DbImplementations;
 
 use DbMockLibrary\Exceptions\AlreadyInitializedException;
 use DbMockLibrary\Exceptions\DbOperationFailedException;
-use DbMockLibrary\AbstractMockLibrary;
+use DbMockLibrary\AbstractImplementation;
 use SimpleArrayLibrary\SimpleArrayLibrary;
 use UnexpectedValueException;
 
-class Mongo extends AbstractMockLibrary
+class Mongo extends AbstractImplementation
 {
     /**
      * @var Mongo $instance

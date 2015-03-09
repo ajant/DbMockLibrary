@@ -2,8 +2,15 @@
 
 namespace DbMockLibrary;
 
-abstract class AbstractMockLibrary extends MockLibrary
+use SimpleArrayLibrary\SimpleArrayLibrary;
+
+abstract class AbstractImplementation extends MockDataManipulation
 {
+    /**
+     * @var array $insertedIntoDb
+     */
+    protected $insertedIntoDb;
+
     /**
      * Fill some or all collections with dummy data
      *
@@ -30,6 +37,10 @@ abstract class AbstractMockLibrary extends MockLibrary
                 $this->validateIds($collection, $ids);
             }
         }
+
+        $records = empty($this->dependencies) ?
+            $records
+            : $this->prepareDependencies($records);
 
         foreach ($records as $collection => $ids) {
             foreach ($ids as $id) {
@@ -89,11 +100,39 @@ abstract class AbstractMockLibrary extends MockLibrary
      * @param string $collection
      * @param string $id
      *
-     * @internal param array $ids
-     *
-     * @internal param array $data
-     *
      * @return void
      */
     abstract protected function delete($collection, $id);
+
+    /**
+     * @param string $collection
+     * @param string $id
+     *
+     * @return void
+     */
+    protected function recordInsert($collection, $id)
+    {
+        for ($i = 0; $i < count($this->insertedIntoDb); $i++) {
+            if (!in_array(array_keys($this->insertedIntoDb[$i]), $collection)) {
+                $this->insertedIntoDb[] = [$collection => [$id]];
+            } else {
+                $this->insertedIntoDb[$i][$collection][] = $id;
+                break;
+            }
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function cleanUp()
+    {
+        $reverseOrder = array_reverse($this->insertedIntoDb);
+        for ($i = 0; $i < count($reverseOrder); $i++) {
+            foreach ($reverseOrder[$i] as $collection => $id) {
+                $this->delete($collection, $id);
+            }
+        }
+        $this->insertedIntoDb = [];
+    }
 } 

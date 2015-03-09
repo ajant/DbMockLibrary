@@ -4,12 +4,12 @@ namespace DbMockLibrary\DbImplementations;
 
 use DbMockLibrary\Exceptions\AlreadyInitializedException;
 use DbMockLibrary\Exceptions\DbOperationFailedException;
-use DbMockLibrary\AbstractMockLibrary;
+use DbMockLibrary\AbstractImplementation;
 use PDO;
 use SimpleArrayLibrary\SimpleArrayLibrary;
 use UnexpectedValueException;
 
-class MySQL extends AbstractMockLibrary
+class MySQL extends AbstractImplementation
 {
     /**
      * @var MySQL $instance

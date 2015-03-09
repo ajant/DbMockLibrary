@@ -4,13 +4,16 @@
 	"authors": [
 		{
 			"name": "Jovanovic Aleksandar",
-			"email": "jovanovic.aleksandar.83@gmail.com"
+			"email": "ajant.github@gmail.com"
 		}
 	],
+  "license": "MIT",
+  "description": "Db mocking & dummy data management library",
+  "homepage": "https://github.com/ajant/DbMockLibrary",
 	"require": {
 		"php": ">=5.4.0",
 		"phpunit/phpunit": "4.*",
-		"coa/simple-array-library": "*"
+		"ajant/simple-array-library": "1.*"
 	},
 	"autoload": {
 		"psr-4": {

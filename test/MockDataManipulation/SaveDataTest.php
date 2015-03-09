@@ -1,7 +1,7 @@
 <?php
-namespace Test\MockLibrary;
+namespace Test\MockDataManipulation;
 
-use \DbMockLibrary\MockLibrary;
+use \DbMockLibrary\MockDataManipulation;
 
 class SaveDataTest extends \Test\TestCase
 {
@@ -15,16 +15,16 @@ class SaveDataTest extends \Test\TestCase
     public function test_function(array $data)
     {
         // prepare
-        MockLibrary::init(['collection' => ['id' => ['field' => 'value']]]);
-        $reflection   = new \ReflectionClass('\DbMockLibrary\MockLibrary');
+        MockDataManipulation::init(['collection' => ['id' => ['field' => 'value']]]);
+        $reflection   = new \ReflectionClass('\DbMockLibrary\MockDataManipulation');
         $dataProperty = $reflection->getProperty('data');
         $dataProperty->setAccessible(true);
 
         // invoke logic
-        MockLibrary::getInstance()->saveData($data['value'], $data['collection'], $data['id'], $data['field'], $data['strict']);
+        MockDataManipulation::getInstance()->saveData($data['value'], $data['collection'], $data['id'], $data['field'], $data['strict']);
 
         // test
-        $this->assertEquals($data['expected'], $dataProperty->getValue(MockLibrary::getInstance()));
+        $this->assertEquals($data['expected'], $dataProperty->getValue(MockDataManipulation::getInstance()));
     }
 
     /**

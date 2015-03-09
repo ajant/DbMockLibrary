@@ -1,7 +1,7 @@
 <?php
-namespace Test\MockLibrary;
+namespace Test\MockDataManipulation;
 
-use \DbMockLibrary\MockLibrary;
+use \DbMockLibrary\MockDataManipulation;
 
 class SaveDataXTest extends \Test\TestCase
 {
@@ -16,10 +16,10 @@ class SaveDataXTest extends \Test\TestCase
     {
         // prepare
         $this->setExpectedException($data['exception'], $data['message']);
-        MockLibrary::init(['collection' => ['id' => ['field' => 'value']]]);
+        MockDataManipulation::init(['collection' => ['id' => ['field' => 'value']]]);
 
         // invoke logic & test
-        MockLibrary::getInstance()->saveData($data['value'], $data['collection'], $data['id'], $data['field']);
+        MockDataManipulation::getInstance()->saveData($data['value'], $data['collection'], $data['id'], $data['field']);
     }
 
     /**

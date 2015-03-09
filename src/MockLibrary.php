@@ -2,6 +2,7 @@
 
 namespace DbMockLibrary;
 
+use DbMockLibrary\Exceptions\InvalidDependencyException;
 use SimpleArrayLibrary\SimpleArrayLibrary;
 use DbMockLibrary\Exceptions\AlreadyInitializedException;
 use InvalidArgumentException;
@@ -20,14 +21,14 @@ class MockLibrary
     protected $data;
 
     /**
+     * @var array $dependencies
+     */
+    protected $dependencies;
+
+    /**
      * @var array $initialData
      */
     protected static $initialData;
-
-    /**
-     * @var array $config
-     */
-    protected $config;
 
     /**
      * @var array $callArguments
@@ -38,6 +39,11 @@ class MockLibrary
      * @var array $traces
      */
     protected $traces = [];
+
+    /**
+     * @var array $insertedIntoDb
+     */
+    protected $insertedIntoDb;
 
     protected function __construct() {}
 
@@ -137,63 +143,86 @@ class MockLibrary
      * @param string       $collection
      * @param string       $id
      * @param string       $field
-     * @param bool         $strict
      *
      * @return void
      */
-    public function saveData($value, $collection = '', $id = '', $field = '', $strict = false)
+    public function saveData($value, $collection = '', $id = '', $field = '')
     {
-        if ($strict && !empty($collection)) {
-            $this->validateCollections([$collection]);
-        }
-        if ($strict && !empty($id)) {
-            $this->validateIds($collection, [$id]);
-        }
-        if (!is_bool($strict)) {
-            throw new InvalidArgumentException('Strict must be a boolean');
-        }
-
-        // if collection is specified we need to perform additional checks
         if (!empty($collection)) {
-            // if element is defined
             if (!empty($id)) {
-                // if field is defined, insert/replace
                 if (!empty($field)) {
-                    // field required, but missing
-                    if ($strict && (!isset($this->data[$collection][$id][$field]) || !array_key_exists($field, $this->data[$collection][$id]))) {
-                        throw new UnexpectedValueException("Invalid field: \"{$field}\"");
+                    if (!isset($this->data[$collection])) {
+                        throw new UnexpectedValueException('Non existing collection');
                     }
-                    // exception not thrown, insert/replace field
+                    if (!isset($this->data[$collection][$id])) {
+                        throw new UnexpectedValueException('Non existing row');
+                    }
+
                     $this->data[$collection][$id][$field] = $value;
                 } else {
-                    // insert/replace entire collection element
                     if (!is_array($value)) {
-                        // row must be array of fields
                         throw new UnexpectedValueException('Row should be an array of fields');
                     }
 
-                    // insert/replace new row of the collection
+                    $data[$collection] = isset($data[$collection]) ? $data[$collection] : [];
                     $this->data[$collection][$id] = $value;
                 }
             } else {
-                // insert/replace an entire collection
                 if (SimpleArrayLibrary::countMaxDepth($value) <= 1) {
-                    // collection has to be array of rows which are all arrays of fields
                     throw new UnexpectedValueException('Collection has to be array of rows which are all arrays of fields');
                 }
-                // /insert/replace collection
+
                 $this->data[$collection] = $value;
             }
         } else {
-            // insert/replace an entire collection
             if (SimpleArrayLibrary::countMaxDepth($value) <= 2) {
-                // data has to be array of collections which are all arrays of rows which are all arrays of fields
                 throw new UnexpectedValueException('Data has to be an array of collections which are all arrays of rows which are all arrays of fields');
             }
 
-            // if collection is not specified, whole data array is overwritten
             $this->data = $value;
         }
+    }
+
+    /**
+     * Wrapper for saveData, for insertion of a field
+     *
+     * @param $value
+     * @param $collection
+     * @param $id
+     * @param $field
+     *
+     * @return void
+     */
+    public function saveField($value, $collection, $id, $field)
+    {
+        $this->saveData($value, $collection, $id, $field);
+    }
+
+    /**
+     * Wrapper for saveData, for insertion of a row
+     *
+     * @param $value
+     * @param $collection
+     * @param $id
+     *
+     * @return void
+     */
+    public function saveRow($value, $collection, $id)
+    {
+        $this->saveData($value, $collection, $id);
+    }
+
+    /**
+     * Wrapper for saveData, for insertion of a collection
+     *
+     * @param $value
+     * @param $collection
+     *
+     * @return void
+     */
+    public function saveCollection($value, $collection)
+    {
+        $this->saveData($value, $collection);
     }
 
     /**
@@ -298,36 +327,6 @@ class MockLibrary
     }
 
     /**
-     * @param string $object
-     * @param string $method
-     * @param array  $arguments
-     *
-     * @return array
-     */
-    public function recordArguments($object, $method, array $arguments)
-    {
-        if (!method_exists($object, $method)) {
-            throw new UnexpectedValueException('Invalid method');
-        }
-
-        $this->callArguments[] = [get_class($object) . '::' . $method => $arguments];
-    }
-
-    /**
-     * @return void
-     */
-    public function recordTrace()
-    {
-        try {
-            throw new \Exception();
-        } catch (\Exception $e) {
-            $tmp = $e->getTrace();
-            array_shift($tmp);
-            $this->traces[] = $tmp;
-        }
-    }
-
-    /**
      * @param array $collections
      *
      * @return array
@@ -341,29 +340,7 @@ class MockLibrary
         return $collections;
     }
 
-    /**
-     * @param string $class
-     * @param string $method
-     * @param array  $arguments
-     * @param bool   $times
-     *
-     * @return bool
-     */
-    public function wasCalled($class, $method, array $arguments = null)
-    {
-        $traces  = $this->getFullTraceDetails($class, $method);
-        $counter = 0;
 
-        foreach ($traces as $trace) {
-            foreach ($trace as $calls) {
-                if ($calls['function'] == $method && $calls['class'] == $class && (is_null($arguments) || $calls['args'] == $arguments)) {
-                    $counter++;
-                }
-            }
-        }
-
-        return $counter;
-    }
 
     /**
      * @param array $collections
@@ -398,6 +375,60 @@ class MockLibrary
             if (!isset($this->data[$collection][$id]) && !array_key_exists($id, $this->data[$collection])) {
                 throw new UnexpectedValueException('Element with id ' . var_export($id, true) . ' does not exist');
             }
+        }
+    }
+
+
+    /**
+     * @param string $class
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @return bool
+     */
+    public function wasCalled($class, $method, array $arguments = null)
+    {
+        $traces  = $this->getFullTraceDetails($class, $method);
+        $counter = 0;
+
+        foreach ($traces as $trace) {
+            foreach ($trace as $calls) {
+                if ($calls['function'] == $method && $calls['class'] == $class && (is_null($arguments) || $calls['args'] == $arguments)) {
+                    $counter++;
+                }
+            }
+        }
+
+        return $counter;
+    }
+
+    /**
+     * @param string $object
+     * @param string $method
+     * @param array  $arguments
+     *
+     * @return array
+     */
+    public function recordArguments($object, $method, array $arguments)
+    {
+        if (!method_exists($object, $method)) {
+            throw new UnexpectedValueException('Invalid method');
+        }
+
+        $this->callArguments[] = [get_class($object) . '::' . $method => $arguments];
+    }
+
+    /**
+     * @return void
+     */
+    public function recordTrace()
+    {
+        try {
+            throw new \Exception();
+        } catch (\Exception $e) {
+            $tmp = $e->getTrace();
+            array_shift($tmp);
+            $this->traces[] = $tmp;
         }
     }
 
@@ -446,5 +477,327 @@ class MockLibrary
     public function getCallArguments()
     {
         return $this->callArguments;
+    }
+
+
+
+    public static function prepareDependencies(array $data, array $dependencies, array $wanted, $prepared = [])
+    {
+        $prepared = empty($prepared) ? [$wanted] : $prepared;
+        foreach ($wanted as $dependentCollection => $dependentIds) {
+            foreach ($dependencies as $dependency) {
+                $toAdd = [];
+                $onCollection = reset(array_keys($dependency[ON]));
+                $onField = reset($dependency[ON]);
+                $dependentField = reset($dependency[DEPENDENT]);
+                // if dependency exists for the wanted collection
+                if (isset($dependency[DEPENDENT][$dependentCollection])) {
+                    foreach ($data[$onCollection] as $onId => $onRow) {
+                        foreach ($dependentIds as $dependentId) {
+                            if ($onRow[$onField] == $data[$dependentCollection][$dependentId][$dependentField]) {
+                                $toAdd[$onId] = true;
+                            }
+                        }
+                    }
+                    $newWanted = [$onCollection => array_keys($toAdd)];
+                    $prepared[] = $newWanted;
+                    $prepared = self::prepareDependencies($data, $dependencies, $newWanted, $prepared);
+                }
+            }
+        }
+
+        return $prepared;
+    }
+
+    public static function validateDependencies(array $dependencies, array $data)
+    {
+        foreach ($dependencies as $dependency) {
+            $dependentCollection = reset(array_keys($dependency[DEPENDENT]));
+            $dependentColumn = $dependency[DEPENDENT][$dependentCollection];
+            if (!(isset($data[$dependentCollection]) || array_key_exists($dependentCollection, $data))) {
+                throw new InvalidDependencyException('Collection "' . $dependentCollection . ' does not exist');
+            }
+            foreach ($data[$dependentCollection] as $row) {
+                if (!(isset($row[$dependentColumn]) || array_key_exists($dependentColumn, $row))) {
+                    throw new InvalidDependencyException('Column "' . $dependentColumn . ' does not exist in a row in a collection "' . $dependentCollection . '"');
+                }
+            }
+
+            $onCollection = reset(array_keys($dependency[ON]));
+            $onColumn = $dependency[ON][$onCollection];
+            if (!(isset($data[$onCollection]) || array_key_exists($onCollection, $data))) {
+                throw new InvalidDependencyException('Collection "' . $onCollection . ' does not exist');
+            }
+            foreach ($data[$onCollection] as $row) {
+                if (!(isset($row[$onColumn]) || array_key_exists($onColumn, $row))) {
+                    throw new InvalidDependencyException('Column "' . $onColumn . ' does not exist in a row in a collection "' . $onCollection . '"');
+                }
+            }
+        }
+        foreach ($data as $collection => $whatever) {
+            $levels = [[$collection]];
+            for ($i = 0; $i < count($levels); $i++) {
+                $newDependencies = [];
+                foreach ($levels[$i] as $collectionToCheck) {
+                    foreach ($dependencies as $dependency) {
+                        if ($collectionToCheck == ($dependentCollection = reset(array_keys($dependency[DEPENDENT])))) {
+                            if ($i != 0 && ($onCollection = reset(array_keys($dependency[ON]))) == $collection) {
+                                throw new InvalidDependencyException('Collection: ' . $collection . ' depends on itself via ' . $dependentCollection);
+                            } else {
+                                $newDependencies[] = $onCollection = reset(array_keys($dependency[ON]));
+                            }
+                        }
+                    }
+                }
+                if (!empty($newDependencies)) {
+                    $levels[$i + 1] = $newDependencies;
+                }
+            }
+        }
+    }
+
+
+
+    /**
+     * @param array $table
+     * @param string $column
+     * @param bool  $ascending
+     *
+     * @return array
+     * @throws InvalidArgumentException
+     */
+    public static function orderTableByColumn(array $table, $column, $ascending = true)
+    {
+        if (empty($table)) {
+            return $table;
+        }
+
+        if (SimpleArrayLibrary::isAssociative($table)) {
+            throw new InvalidArgumentException('No point in sorting non-numeric array');
+        }
+
+        for ($i = 0; $i < count($table) - 1; $i++) {
+            for ($j = $i + 1; $j < count($table); $j++) {
+                if (!isset($table[$i][$column])) {
+                    throw new InvalidArgumentException("Sort column missing from row: '{$i}'");
+                }
+                if (!isset($table[$j][$column])) {
+                    throw new InvalidArgumentException("Sort column missing from row: '{$j}'");
+                }
+
+                // sort
+                if ($ascending) {
+                    if ($table[$i][$column] > $table[$j][$column]) {
+                        $tmp       = $table[$i];
+                        $table[$i] = $table[$j];
+                        $table[$j] = $tmp;
+                    }
+                } else {
+                    if ($table[$i][$column] < $table[$j][$column]) {
+                        $tmp       = $table[$i];
+                        $table[$i] = $table[$j];
+                        $table[$j] = $tmp;
+                    }
+                }
+            }
+        }
+
+        return $table;
+    }
+
+    /**
+     * @param array $table1
+     * @param array $table2
+     * @param array $joinColumns
+     * @param array $selectColumns1
+     * @param array $selectColumns2
+     * @param bool  $distinct
+     *
+     * @throws InvalidArgumentException
+     * @return array
+     */
+    public static function joinTables(array $table1, array $table2, array $joinColumns, array $selectColumns1, array $selectColumns2, $distinct = false)
+    {
+        // input validation
+        if (empty($joinColumns)) {
+            throw new InvalidArgumentException('No join condition provided');
+        }
+        if (empty($selectColumns1) && empty($selectColumns1)) {
+            throw new InvalidArgumentException('No columns selected from the joining result');
+        }
+        $table1Invalid = count(SimpleArrayLibrary::getRectangularDimensions($table1)) != 2 && !empty($table1);
+        $table2Invalid = count(SimpleArrayLibrary::getRectangularDimensions($table2)) != 2 && !empty($table2);
+        if ($table1Invalid || $table2Invalid) {
+            if ($table1Invalid && $table2Invalid) {
+                throw new InvalidArgumentException('Neither of the tables is a rectangular 2 dimensional array');
+            } elseif ($table1Invalid) {
+                throw new InvalidArgumentException('Table one is not a rectangular 2 dimensional array');
+            } else {
+                throw new InvalidArgumentException('Table two is not a rectangular 2 dimensional array');
+            }
+        }
+        if (!empty(array_intersect($selectColumns1, $selectColumns2))) {
+            throw new InvalidArgumentException('Select columns must have no equal values, or columns in the result will be overwritten');
+        }
+        if (!is_bool($distinct)) {
+            throw new InvalidArgumentException('Invalid distinct parameter');
+        }
+
+        if (empty($table1) || empty($table2)) {
+            return [];
+        }
+
+        $return = [];
+        foreach ($table1 as $key1 => $row1) {
+            // input validation
+            if (!SimpleArrayLibrary::isSubarray(array_keys($row1), array_keys($joinColumns))) {
+                throw new InvalidArgumentException("Join column(s) missing from row {$key1} of first table");
+            }
+            if (!SimpleArrayLibrary::isSubarray(array_keys($row1), array_keys($selectColumns1))) {
+                throw new InvalidArgumentException("Selected column(s) missing from row {$key1} of first table");
+            }
+
+            foreach ($table2 as $key2 => $row2) {
+                // input validation
+                if (!SimpleArrayLibrary::isSubarray(array_keys($row2), $joinColumns)) {
+                    throw new InvalidArgumentException("Join column(s) missing from row {$key2} of second table");
+                }
+                if (!SimpleArrayLibrary::isSubarray(array_keys($row2), array_keys($selectColumns2))) {
+                    throw new InvalidArgumentException("Selected column(s) missing from row {$key2} of second table");
+                }
+
+                // check join conditions
+                $match = true;
+                foreach ($joinColumns as $key => $value) {
+                    if ($row1[$key] != $row2[$value]) {
+                        $match = false;
+                        break;
+                    }
+                }
+
+                // join rows if all required columns are matched
+                if ($match) {
+                    $row = [];
+                    // include columns from table 1
+                    foreach ($selectColumns1 as $oldKey => $newKey) {
+                        $row[$newKey] = $row1[$oldKey];
+                    }
+                    // include columns from table 2
+                    foreach ($selectColumns2 as $oldKey => $newKey) {
+                        $row[$newKey] = $row2[$oldKey];
+                    }
+                    $return[] = $row;
+                }
+            }
+        }
+
+        // remove duplicated rows
+        if ($distinct) {
+            $return = array_unique($return, SORT_REGULAR);
+        }
+
+        return $return;
+    }
+
+    /**
+     * @param array        $table
+     * @param string       $column
+     * @param string       $condition
+     * @param array|string $value
+     *
+     * @return array
+     * @throws InvalidArgumentException
+     */
+    public static function whereCondition(array $table, $column, $condition, $value)
+    {
+        // input validation
+        if (!is_numeric($column)
+            && (empty($column)
+                || !is_string($column))
+        ) {
+            throw new InvalidArgumentException('Invalid column parameter');
+        }
+
+        if (count(SimpleArrayLibrary::getRectangularDimensions($table)) != 2) {
+            if (empty($table)) {
+                return [];
+            } else {
+                throw new InvalidArgumentException('Table is not a rectangular 2 dimensional array');
+            }
+        }
+
+        $validConditions = [
+            '>',
+            '<',
+            '=',
+            '==',
+            '>=',
+            '<=',
+            '<>',
+            'in',
+            'notin'
+        ];
+        $condition       = strtolower($condition);
+        if (!in_array($condition, $validConditions)) {
+            throw new InvalidArgumentException('Invalid condition parameter');
+        }
+        if (in_array($condition, ['in', 'notin'])
+            && !is_array($value)
+        ) {
+            throw new InvalidArgumentException('In case of "in" & "notin" conditions, value must be an array');
+        } elseif (!in_array($condition, ['in', 'notin'])
+            && !is_numeric($value)
+            && !is_string($value)
+            && !is_null($value)
+        ) {
+            throw new InvalidArgumentException('Invalid value');
+        }
+
+        $return       = [];
+        $tableNumeric = !SimpleArrayLibrary::isAssociative($table);
+        foreach ($table as $index => $row) {
+            if (!isset($row[$column])) {
+                throw new InvalidArgumentException('Column missing from row: ' . $index);
+            }
+
+            $keep = true;
+            switch ($condition) {
+                case '>':
+                    $keep = $row[$column] > $value;
+                    break;
+                case '<':
+                    $keep = $row[$column] < $value;
+                    break;
+                case '>=':
+                    $keep = $row[$column] >= $value;
+                    break;
+                case '<=':
+                    $keep = $row[$column] <= $value;
+                    break;
+                case '=':
+                case '==':
+                    $keep = $row[$column] == $value;
+                    break;
+                case '<>':
+                    $keep = $row[$column] <> $value;
+                    break;
+                case 'in':
+                    $keep = in_array($row[$column], $value);
+                    break;
+                case 'notin':
+                    $keep = !in_array($row[$column], $value);
+                    break;
+            }
+
+            if ($keep) {
+                if ($tableNumeric) {
+                    $return[] = $row;
+                } else {
+                    $return[$index] = $row;
+                }
+            }
+        }
+
+        return $return;
     }
 }
