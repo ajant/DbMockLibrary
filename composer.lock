@@ -4,20 +4,20 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d55666dc79ea19d4ac96930fa66294e3",
+    "hash": "18a519f28992773e7685f8e71414e8f9",
     "packages": [
         {
             "name": "ajant/simple-array-library",
-            "version": "3.0.0",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ajant/SimpleArrayLibrary.git",
-                "reference": "d876f4910782671fe9859a6dc3d36804d7472d54"
+                "reference": "1e2d5e227a69455e778d4e7544332964cf10d4a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ajant/SimpleArrayLibrary/zipball/d876f4910782671fe9859a6dc3d36804d7472d54",
-                "reference": "d876f4910782671fe9859a6dc3d36804d7472d54",
+                "url": "https://api.github.com/repos/ajant/SimpleArrayLibrary/zipball/1e2d5e227a69455e778d4e7544332964cf10d4a8",
+                "reference": "1e2d5e227a69455e778d4e7544332964cf10d4a8",
                 "shasum": ""
             },
             "require": {
@@ -42,7 +42,7 @@
             ],
             "description": "Simple library containing convenient array handling methods",
             "homepage": "https://github.com/ajant/SimpleArrayLibrary",
-            "time": "2015-03-07 14:29:34"
+            "time": "2015-03-07 15:19:18"
         },
         {
             "name": "doctrine/instantiator",
