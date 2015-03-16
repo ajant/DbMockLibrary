@@ -15,7 +15,7 @@ class GetAllCollectionsIfEmptyTest extends \Test\TestCase
     public function test_function(array $data)
     {
         // prepare
-        MockDataManipulation::init(['collection1' => [], 'collection2' => []]);
+        MockDataManipulation::initDataContainer(['collection1' => [], 'collection2' => []]);
         $reflection                     = new \ReflectionClass('\DbMockLibrary\MockDataManipulation');
         $getAllCollectionsIfEmptyMethod = $reflection->getMethod('getAllCollectionsIfEmpty');
         $getAllCollectionsIfEmptyMethod->setAccessible(true);

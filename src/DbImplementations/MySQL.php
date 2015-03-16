@@ -38,7 +38,7 @@ class MySQL extends AbstractImplementation
      */
     public static function initMySQL(array $initialData, $serverName, $database, $username, $password)
     {
-        if (!self::$instance) {
+        if (!static::$instance) {
             if (empty($serverName) || !is_string($serverName)) {
                 throw new UnexpectedValueException('Invalid server name');
             }
@@ -55,20 +55,20 @@ class MySQL extends AbstractImplementation
                 throw new UnexpectedValueException('Invalid table names');
             }
 
-            self::$instance              = new self();
-            self::$instance->data        = self::$initialData = $initialData;
-            self::$instance->connection  = new PDO('mysql:host=' . $serverName . ';dbname=' . $database, $username, $password);
-            self::$instance->primaryKeys = [];
+            static::$instance              = new static();
+            static::$instance->data        = static::$initialData = $initialData;
+            static::$instance->connection  = new PDO('mysql:host=' . $serverName . ';dbname=' . $database, $username, $password);
+            static::$instance->primaryKeys = [];
             foreach ($initialData as $table => $data) {
-                $stmt = self::$instance->connection->prepare("SHOW KEYS FROM {$table} WHERE Key_name = 'PRIMARY'");
+                $stmt = static::$instance->connection->prepare("SHOW KEYS FROM {$table} WHERE Key_name = 'PRIMARY'");
                 $stmt->execute();
-                self::$instance->primaryKeys[$table] = [];
+                static::$instance->primaryKeys[$table] = [];
                 foreach ($stmt->fetchAll() as $row) {
-                    self::$instance->primaryKeys[$table][] = $row['Column_name'];
+                    static::$instance->primaryKeys[$table][] = $row['Column_name'];
                 }
             }
 
-            foreach (self::$instance->primaryKeys as $table => $keys) {
+            foreach (static::$instance->primaryKeys as $table => $keys) {
                 foreach ($initialData[$table] as $row) {
                     if (!SimpleArrayLibrary::hasAllKeys($row, $keys)) {
                         throw new UnexpectedValueException('Missing keys in initial data for table: ' . $table);
@@ -77,7 +77,7 @@ class MySQL extends AbstractImplementation
             }
 
             // edit $data array where needed
-            self::$instance->update();
+            static::$instance->update();
         } else {
             throw new AlreadyInitializedException('MySQL library already initialized');
         }
@@ -88,7 +88,7 @@ class MySQL extends AbstractImplementation
      */
     public static function getInstance()
     {
-        return self::$instance;
+        return static::$instance;
     }
 
     /**
@@ -129,10 +129,10 @@ class MySQL extends AbstractImplementation
         $conditions = [];
         $values     = [];
         foreach ($this->primaryKeys[$collection] as $key) {
-            $conditions[] = $key . ' = ' . ':' . $key;
+            $conditions[] = '`' . $key . '` = ' . ':' . $key;
             $values[$key] = $this->data[$collection][$id][$key];
         }
-        $query .= implode(', ', $conditions);
+        $query .= implode(' AND ', $conditions);
         $stmt = $this->connection->prepare($query);
 
         if (!$stmt->execute($values)) {

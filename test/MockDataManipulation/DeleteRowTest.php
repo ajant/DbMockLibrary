@@ -12,7 +12,7 @@ class DeleteRowTest extends \Test\TestCase
     {
         // invoke logic
         $dataArray = ['collection' => ['id1' => [1],'id2' => [2]]];
-        MockDataManipulation::init($dataArray);
+        MockDataManipulation::initDataContainer($dataArray);
         $reflection = new \ReflectionClass('\DbMockLibrary\MockDataManipulation');
         $dataProperty = $reflection->getProperty('data');
         $dataProperty->setAccessible(true);

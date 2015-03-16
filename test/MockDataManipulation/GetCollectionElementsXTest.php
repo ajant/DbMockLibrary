@@ -16,7 +16,7 @@ class GetCollectionElementsXTest extends \Test\TestCase
     {
         // prepare
         $this->setExpectedException('\UnexpectedValueException', $data['errorMessage']);
-        MockDataManipulation::init(['collection' => ['id' => []]]);
+        MockDataManipulation::initDataContainer(['collection' => ['id' => []]]);
 
         // invoke logic & test
         MockDataManipulation::getInstance()->getCollectionElements($data['collection'], $data['id']);

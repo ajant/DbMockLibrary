@@ -25,7 +25,7 @@ class DataContainer extends Base
      * @throws AlreadyInitializedException
      * @throws InvalidDependencyException
      */
-    public static function init(array $initialData)
+    public static function initDataContainer(array $initialData)
     {
         parent::init();
         static::$instance->data = self::$initialData = $initialData;

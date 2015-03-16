@@ -12,7 +12,7 @@ class DeleteRowXTest extends \Test\TestCase
     {
         // prepare
         $this->setExpectedException('\UnexpectedValueException', 'Collection \'fooBar\' does not exist');
-        MockDataManipulation::init(['collection' => ['id' => []]]);
+        MockDataManipulation::initDataContainer(['collection' => ['id' => []]]);
 
         // invoke logic & test
         MockDataManipulation::getInstance()->deleteRow('fooBar', ['id']);

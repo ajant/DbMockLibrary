@@ -22,7 +22,7 @@ class DeleteTest extends \Test\TestCase
         $stmt = $this->pdo->prepare('CREATE DATABASE `DbMockLibraryTest`');
         $stmt->execute();
 
-        $stmt = $this->pdo->prepare('CREATE TABLE IF NOT EXISTS DbMockLibraryTest.testTable (`id` INT, `foo` INT, PRIMARY KEY (`id`))');
+        $stmt = $this->pdo->prepare('CREATE TABLE IF NOT EXISTS DbMockLibraryTest.testTable (`id` INT, `foo` INT, PRIMARY KEY (`id`, `foo`))');
         $stmt->execute();
 
         $stmt = $this->pdo->prepare('INSERT INTO DbMockLibraryTest.testTable (`id`, `foo`) VALUES (0, 0)');
@@ -33,10 +33,10 @@ class DeleteTest extends \Test\TestCase
 
     public function tearDown()
     {
-        $stmt = $this->pdo->prepare('DROP DATABASE IF EXISTS `DbMockLibraryTest`');
+        $stmt = $this->pdo->prepare('DELETE FROM DbMockLibraryTest.testTable WHERE `id` = 0');
         $stmt->execute();
 
-        $stmt = $this->pdo->prepare('DELETE FROM DbMockLibraryTest.testTable WHERE `id` = 0');
+        $stmt = $this->pdo->prepare('DROP DATABASE IF EXISTS `DbMockLibraryTest`');
         $stmt->execute();
 
         if (MySQL::getInstance()) {

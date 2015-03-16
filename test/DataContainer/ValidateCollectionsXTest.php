@@ -12,7 +12,7 @@ class ValidateCollectionsXTest extends \Test\TestCase
     {
         // prepare
         $this->setExpectedException('\UnexpectedValueException', 'Collection \'fooBar\' does not exist');
-        DataContainer::init(['collection' => []]);
+        DataContainer::initDataContainer(['collection' => []]);
         $reflection = new \ReflectionClass(DataContainer::getInstance());
         $validateCollectionsMethod = $reflection->getMethod('validateCollections');
         $validateCollectionsMethod->setAccessible(true);

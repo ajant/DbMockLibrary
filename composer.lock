@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "ajant/simple-array-library",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ajant/SimpleArrayLibrary.git",
-                "reference": "d45f6fcd952478453be1a47e39cc3e39a07f5d0b"
+                "reference": "0b708eee9d44d65ff1434dd49b960f9a50e973d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ajant/SimpleArrayLibrary/zipball/d45f6fcd952478453be1a47e39cc3e39a07f5d0b",
-                "reference": "d45f6fcd952478453be1a47e39cc3e39a07f5d0b",
+                "url": "https://api.github.com/repos/ajant/SimpleArrayLibrary/zipball/0b708eee9d44d65ff1434dd49b960f9a50e973d3",
+                "reference": "0b708eee9d44d65ff1434dd49b960f9a50e973d3",
                 "shasum": ""
             },
             "require": {
@@ -44,7 +44,7 @@
             ],
             "description": "Simple library containing convenient array handling methods",
             "homepage": "https://github.com/ajant/SimpleArrayLibrary",
-            "time": "2015-03-10 12:00:12"
+            "time": "2015-03-16 20:17:04"
         }
     ],
     "packages-dev": [

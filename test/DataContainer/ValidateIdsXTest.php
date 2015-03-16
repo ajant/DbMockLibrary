@@ -16,7 +16,7 @@ class ValidateIdsXTest extends \Test\TestCase
     {
         // prepare
         $this->setExpectedException($data['exception'], $data['errorMessage']);
-        DataContainer::init(['collection' => ['id' => []]]);
+        DataContainer::initDataContainer(['collection' => ['id' => []]]);
         $reflection                = new \ReflectionClass(DataContainer::getInstance());
         $validateCollectionsMethod = $reflection->getMethod('validateIds');
         $validateCollectionsMethod->setAccessible(true);

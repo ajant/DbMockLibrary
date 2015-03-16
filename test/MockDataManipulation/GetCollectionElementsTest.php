@@ -15,7 +15,7 @@ class GetCollectionElementsTest extends \Test\TestCase
     public function test_function(array $data)
     {
         // prepare
-        MockDataManipulation::init(['collection' => ['id' => [1]]]);
+        MockDataManipulation::initDataContainer(['collection' => ['id' => [1]]]);
 
         // invoke logic
         $result = MockDataManipulation::getInstance()->getCollectionElements($data['collection'], $data['id']);

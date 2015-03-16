@@ -15,7 +15,7 @@ class SaveDataTest extends \Test\TestCase
     public function test_function(array $data)
     {
         // prepare
-        MockDataManipulation::init(['collection' => ['id' => ['field' => 'value']]]);
+        MockDataManipulation::initDataContainer(['collection' => ['id' => ['field' => 'value']]]);
         $reflection   = new \ReflectionClass('\DbMockLibrary\MockDataManipulation');
         $dataProperty = $reflection->getProperty('data');
         $dataProperty->setAccessible(true);

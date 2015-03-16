@@ -29,7 +29,7 @@ class Mongo extends AbstractImplementation
      */
     public static function initMongo(array $initialData, $database)
     {
-        if (!self::$instance) {
+        if (!static::$instance) {
             if (empty($database) || !is_string($database)) {
                 throw new UnexpectedValueException('Invalid database name');
             }
@@ -37,13 +37,13 @@ class Mongo extends AbstractImplementation
                 throw new UnexpectedValueException('Invalid collection names');
             }
 
-            self::$instance             = new self();
-            self::$instance->data       = self::$initialData = $initialData;
+            static::$instance             = new static();
+            static::$instance->data       = static::$initialData = $initialData;
             $client = new \MongoClient();
-            self::$instance->database = $client->selectDB($database);
+            static::$instance->database = $client->selectDB($database);
 
             // edit $data array where needed
-            self::$instance->update();
+            static::$instance->update();
         } else {
             throw new AlreadyInitializedException('Mongo library already initialized');
         }
@@ -54,7 +54,7 @@ class Mongo extends AbstractImplementation
      */
     public static function getInstance()
     {
-        return self::$instance;
+        return static::$instance;
     }
 
     /**
@@ -68,7 +68,7 @@ class Mongo extends AbstractImplementation
      */
     protected function insert($collectionName, $id)
     {
-        $collection = self::$instance->database->selectCollection($collectionName);
+        $collection = static::$instance->database->selectCollection($collectionName);
         if (!$collection->insert($this->data[$collectionName][$id], ['w' => 1])) {
             throw new DbOperationFailedException('Insert failed');
         }
@@ -85,7 +85,7 @@ class Mongo extends AbstractImplementation
      */
     protected function delete($collectionName, $id)
     {
-        $collection = self::$instance->database->selectCollection($collectionName);
+        $collection = static::$instance->database->selectCollection($collectionName);
         if (!$collection->remove(['_id' => $this->data[$collectionName][$id]['_id']], ['w' => 1])) {
             throw new DbOperationFailedException('Delete failed');
         }

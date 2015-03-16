@@ -16,8 +16,8 @@ class GetAllIdsTest extends \Test\TestCase
     {
         // prepare
         MockLibrary::init([
-                'collection1' => ['id1' => [1], 'id2' => [2]], 'collection2' => ['id3' => [1], 'id4' => [2]]
-            ]);
+            'collection1' => ['id1' => [1], 'id2' => [2]], 'collection2' => ['id3' => [1], 'id4' => [2]]
+        ]);
 
         // invoke logic
         $result = MockLibrary::getInstance()->getAllIds($data['collections'], $data['byCollection']);

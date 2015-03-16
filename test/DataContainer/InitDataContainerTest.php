@@ -3,7 +3,7 @@ namespace Test\DataContainer;
 
 use \DbMockLibrary\DataContainer;
 
-class InitTest extends \Test\TestCase
+class InitDataContainerTest extends \Test\TestCase
 {
     /**
      * @return void
@@ -12,7 +12,7 @@ class InitTest extends \Test\TestCase
     {
         // invoke logic
         $dataArray = [1];
-        DataContainer::init($dataArray);
+        DataContainer::initDataContainer($dataArray);
 
         // prepare
         $reflection = new \ReflectionClass('\DbMockLibrary\DataContainer');

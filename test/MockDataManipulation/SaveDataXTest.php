@@ -16,7 +16,7 @@ class SaveDataXTest extends \Test\TestCase
     {
         // prepare
         $this->setExpectedException($data['exception'], $data['message']);
-        MockDataManipulation::init(['collection' => ['id' => ['field' => 'value']]]);
+        MockDataManipulation::initDataContainer(['collection' => ['id' => ['field' => 'value']]]);
 
         // invoke logic & test
         MockDataManipulation::getInstance()->saveData($data['value'], $data['collection'], $data['id'], $data['field']);

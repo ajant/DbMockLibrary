@@ -12,7 +12,7 @@ class GetAllIdsXTest extends \Test\TestCase
     {
         // prepare
         $this->setExpectedException('\UnexpectedValueException', 'Collection \'fooBar\' does not exist');
-        MockDataManipulation::init(['collection' => []]);
+        MockDataManipulation::initDataContainer(['collection' => []]);
 
         // invoke logic & test
         MockDataManipulation::getInstance()->getAllIds(['fooBar']);

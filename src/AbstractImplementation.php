@@ -24,7 +24,7 @@ abstract class AbstractImplementation extends MockDataManipulation
             foreach ($this->data as $collection => $rows) {
                 $records[$collection] = array_keys($rows);
             }
-        } elseif (SimpleArrayLibrary::countMaxDepth($records == 1)) {
+        } elseif (SimpleArrayLibrary::countMaxDepth($records) == 1) {
             $this->validateCollections($records);
 
             $temp = [];
@@ -63,7 +63,7 @@ abstract class AbstractImplementation extends MockDataManipulation
             foreach ($this->data as $collection => $rows) {
                 $records[$collection] = array_keys($rows);
             }
-        } elseif (SimpleArrayLibrary::countMaxDepth($records == 1)) {
+        } elseif (SimpleArrayLibrary::countMaxDepth($records) == 1) {
             $this->validateCollections($records);
 
             $temp = [];

@@ -15,7 +15,7 @@ class GetAllIdsTest extends \Test\TestCase
     public function test_function(array $data)
     {
         // prepare
-        MockDataManipulation::init([
+        MockDataManipulation::initDataContainer([
                 'collection1' => ['id1' => [1], 'id2' => [2]], 'collection2' => ['id3' => [1], 'id4' => [2]]
             ]);
 

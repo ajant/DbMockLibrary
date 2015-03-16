@@ -15,7 +15,7 @@ class DropCollectionsTest extends \Test\TestCase
     public function test_function(array $data)
     {
         // prepare
-        MockDataManipulation::init(['collection1' => ['id1' => [1], 'id2' => [2]], 'collection2' => ['id3' => [1], 'id4' => [2]]]);
+        MockDataManipulation::initDataContainer(['collection1' => ['id1' => [1], 'id2' => [2]], 'collection2' => ['id3' => [1], 'id4' => [2]]]);
         $reflection = new \ReflectionClass('\DbMockLibrary\MockDataManipulation');
         $dataProperty = $reflection->getProperty('data');
         $dataProperty->setAccessible(true);

@@ -12,7 +12,7 @@ class ResetDataTest extends \Test\TestCase
     {
         // prepare
         $dataArray = [1];
-        DataContainer::init($dataArray);
+        DataContainer::initDataContainer($dataArray);
         $reflection = new \ReflectionClass('\DbMockLibrary\DataContainer');
         $staticProperties = $reflection->getStaticProperties();
         $dataProperty = $reflection->getProperty('data');
