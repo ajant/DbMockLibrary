@@ -28,7 +28,7 @@ class DataContainer extends Base
     public static function initDataContainer(array $initialData)
     {
         parent::init();
-        static::$instance->data = self::$initialData = $initialData;
+        static::$instance->data = static::$initialData = $initialData;
 
         // fix/update $data array where needed
         static::$instance->update();
@@ -42,7 +42,7 @@ class DataContainer extends Base
     public function resetData()
     {
         // clear all changes to $data array
-        $this->data = self::$initialData;
+        $this->data = static::$initialData;
 
         // initialize $data array where needed
         $this->update();

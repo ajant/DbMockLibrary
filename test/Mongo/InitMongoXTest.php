@@ -25,9 +25,9 @@ class InitXTest extends \Test\TestCase
         $this->setExpectedException($data['exception'], $data['errorMessage']);
 
         // invoke logic
-        Mongo::initMongo($data['initialData'], $data['database']);
+        Mongo::initMongo($data['initialData'], $data['database'], []);
         if (isset($data['initTwice'])) {
-            Mongo::initMongo($data['initialData'], $data['database']);
+            Mongo::initMongo($data['initialData'], $data['database'], []);
         }
     }
 

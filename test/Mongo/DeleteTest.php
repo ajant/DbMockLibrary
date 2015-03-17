@@ -22,7 +22,7 @@ class DeleteTest extends \Test\TestCase
         $testCollection = $this->database->selectCollection('testCollection');
         $testCollection->insert(['foo' => 0, '_id' => 0]);
 
-        Mongo::initMongo(['testCollection' => [1 => ['foo' => 0, '_id' => 0]]], 'DbMockLibraryTest');
+        Mongo::initMongo(['testCollection' => [1 => ['foo' => 0, '_id' => 0]]], 'DbMockLibraryTest', []);
     }
 
     public function tearDown()

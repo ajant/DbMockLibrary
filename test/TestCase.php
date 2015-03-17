@@ -9,10 +9,10 @@ class TestCase extends \PHPUnit_Framework_TestCase
         parent::tearDown();
 
         $reflections =  [
-            new \ReflectionClass('\DbMockLibrary\MockLibrary'),
             new \ReflectionClass('\DbMockLibrary\Base'),
             new \ReflectionClass('\DbMockLibrary\MockMethodCalls'),
-            new \ReflectionClass('\DbMockLibrary\DataContainer')
+            new \ReflectionClass('\DbMockLibrary\DataContainer'),
+            new \ReflectionClass('\DbMockLibrary\DependencyHandler')
         ];
 
         /* @var $reflection \ReflectionClass */

@@ -12,7 +12,7 @@ use UnexpectedValueException;
 class MySQL extends AbstractImplementation
 {
     /**
-     * @var MySQL $instance
+     * @var static $instance
      */
     protected static $instance;
 
@@ -32,11 +32,11 @@ class MySQL extends AbstractImplementation
      * @param string $database
      * @param string $username
      * @param string $password
+     * @param array  $dependencies
      *
      * @throws AlreadyInitializedException
-     * @return void
      */
-    public static function initMySQL(array $initialData, $serverName, $database, $username, $password)
+    public static function initMySQL(array $initialData, $serverName, $database, $username, $password, array $dependencies)
     {
         if (!static::$instance) {
             if (empty($serverName) || !is_string($serverName)) {
@@ -55,10 +55,9 @@ class MySQL extends AbstractImplementation
                 throw new UnexpectedValueException('Invalid table names');
             }
 
-            static::$instance              = new static();
-            static::$instance->data        = static::$initialData = $initialData;
-            static::$instance->connection  = new PDO('mysql:host=' . $serverName . ';dbname=' . $database, $username, $password);
-            static::$instance->primaryKeys = [];
+            static::initDependencyHandler($initialData, $dependencies);
+            static::$instance->connection   = new PDO('mysql:host=' . $serverName . ';dbname=' . $database, $username, $password);
+            static::$instance->primaryKeys  = [];
             foreach ($initialData as $table => $data) {
                 $stmt = static::$instance->connection->prepare("SHOW KEYS FROM {$table} WHERE Key_name = 'PRIMARY'");
                 $stmt->execute();
@@ -84,7 +83,7 @@ class MySQL extends AbstractImplementation
     }
 
     /**
-     * @return MySQL
+     * @return static
      */
     public static function getInstance()
     {
@@ -104,8 +103,8 @@ class MySQL extends AbstractImplementation
     {
         $data    = $this->data[$collection][$id];
         $columns = array_map(function ($value) {
-                return ':' . $value;
-            }, array_keys($data));
+            return ':' . $value;
+        }, array_keys($data));
         $stmt    = $this->connection->prepare(
             'INSERT INTO ' . $collection . ' (' . implode(', ', array_keys($data)) . ') VALUES (' . implode(', ', $columns) . ');'
         );

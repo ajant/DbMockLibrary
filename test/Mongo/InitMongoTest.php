@@ -19,7 +19,7 @@ class InitTest extends \Test\TestCase
         $dataArray = ['testCollection' => [1 => ['foo' => 1, 'id' => 1]]];
 
         // invoke logic
-        Mongo::initMongo($dataArray, 'DbMockLibraryTest');
+        Mongo::initMongo($dataArray, 'DbMockLibraryTest', []);
 
         // prepare
         $reflection = new \ReflectionClass('\DbMockLibrary\DbImplementations\Mongo');

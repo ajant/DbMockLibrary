@@ -20,7 +20,7 @@ class InsertTest extends \Test\TestCase
         $this->database->dropCollection('testCollection');
         $this->database->createCollection('testCollection');
 
-        Mongo::initMongo(['testCollection' => [1 => ['foo' => 0, '_id' => 0]]], 'DbMockLibraryTest');
+        Mongo::initMongo(['testCollection' => [1 => ['foo' => 0, '_id' => 0]]], 'DbMockLibraryTest', []);
     }
 
     public function tearDown()

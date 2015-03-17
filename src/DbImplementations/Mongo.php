@@ -11,7 +11,7 @@ use UnexpectedValueException;
 class Mongo extends AbstractImplementation
 {
     /**
-     * @var Mongo $instance
+     * @var static $instance
      */
     protected static $instance;
 
@@ -21,13 +21,13 @@ class Mongo extends AbstractImplementation
     protected $database;
 
     /**
-     * @param array $initialData
+     * @param array  $initialData
+     * @param string $database
+     * @param array  $dependencies
      *
      * @throws AlreadyInitializedException
-     * @throws UnexpectedValueException
-     * @return void
      */
-    public static function initMongo(array $initialData, $database)
+    public static function initMongo(array $initialData, $database, array $dependencies)
     {
         if (!static::$instance) {
             if (empty($database) || !is_string($database)) {
@@ -37,9 +37,8 @@ class Mongo extends AbstractImplementation
                 throw new UnexpectedValueException('Invalid collection names');
             }
 
-            static::$instance             = new static();
-            static::$instance->data       = static::$initialData = $initialData;
-            $client = new \MongoClient();
+            static::initDependencyHandler($initialData, $dependencies);
+            $client                     = new \MongoClient();
             static::$instance->database = $client->selectDB($database);
 
             // edit $data array where needed
@@ -50,7 +49,7 @@ class Mongo extends AbstractImplementation
     }
 
     /**
-     * @return Mongo
+     * @return static
      */
     public static function getInstance()
     {

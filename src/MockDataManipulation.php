@@ -120,7 +120,7 @@ class MockDataManipulation extends DependencyHandler
         $collections = $this->getAllCollectionsIfEmpty($collections);
 
         foreach ($collections as $collection) {
-            $this->data[$collection] = self::$initialData[$collection];
+            $this->data[$collection] = static::$initialData[$collection];
             $this->update($collection);
         }
     }
