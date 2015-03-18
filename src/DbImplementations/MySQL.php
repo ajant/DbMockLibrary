@@ -17,6 +17,11 @@ class MySQL extends AbstractImplementation
     protected static $instance;
 
     /**
+     * @var array $initialData
+     */
+    protected static $initialData;
+
+    /**
      * @var PDO $connection
      */
     protected $connection;
@@ -55,6 +60,7 @@ class MySQL extends AbstractImplementation
                 throw new UnexpectedValueException('Invalid table names');
             }
 
+            static::$initialData = $initialData;
             static::initDependencyHandler($initialData, $dependencies);
             static::$instance->connection   = new PDO('mysql:host=' . $serverName . ';dbname=' . $database, $username, $password);
             static::$instance->primaryKeys  = [];

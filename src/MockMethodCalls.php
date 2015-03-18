@@ -23,7 +23,7 @@ class MockMethodCalls extends DataContainer
      *
      * @return bool
      */
-    public function wasCalled($class, $method, array $arguments = null)
+    public function wasCalledCount($class, $method, array $arguments = null)
     {
         $traces  = $this->getFullTraceDetails($class, $method);
         $counter = 0;
@@ -52,7 +52,7 @@ class MockMethodCalls extends DataContainer
             throw new UnexpectedValueException('Invalid method');
         }
 
-        $this->callArguments[] = [get_class($object) . '::' . $method => $arguments];
+        $this->callArguments[] = is_string($object) ? $object : [get_class($object) . '::' . $method => $arguments];
     }
 
     /**

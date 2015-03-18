@@ -16,6 +16,11 @@ class Mongo extends AbstractImplementation
     protected static $instance;
 
     /**
+     * @var array $initialData
+     */
+    protected static $initialData;
+
+    /**
      * @var \MongoDB $database
      */
     protected $database;
@@ -37,6 +42,7 @@ class Mongo extends AbstractImplementation
                 throw new UnexpectedValueException('Invalid collection names');
             }
 
+            static::$initialData = $initialData;
             static::initDependencyHandler($initialData, $dependencies);
             $client                     = new \MongoClient();
             static::$instance->database = $client->selectDB($database);

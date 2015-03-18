@@ -27,8 +27,8 @@ class DataContainer extends Base
      */
     public static function initDataContainer(array $initialData)
     {
-        parent::init();
-        static::$instance->data = static::$initialData = $initialData;
+        static::init();
+        static::$instance->data = $initialData;
 
         // fix/update $data array where needed
         static::$instance->update();

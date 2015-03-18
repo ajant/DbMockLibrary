@@ -28,7 +28,7 @@ class DependencyHandler extends DataContainer
      */
     public static function initDependencyHandler(array $initialData, array $dependencies = [])
     {
-        parent::initDataContainer($initialData);
+        static::initDataContainer($initialData);
         if ($dependencies) {
             static::$instance->validate($dependencies);
             static::$instance->dependencies = $dependencies;

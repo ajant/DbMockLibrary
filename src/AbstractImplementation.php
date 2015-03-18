@@ -9,7 +9,7 @@ abstract class AbstractImplementation extends MockDataManipulation
     /**
      * @var array $insertedIntoDb
      */
-    protected $insertedIntoDb;
+    protected $insertedIntoDb = [];
 
     /**
      * Fill some or all collections with dummy data
@@ -38,13 +38,19 @@ abstract class AbstractImplementation extends MockDataManipulation
             }
         }
 
-        $records = empty($this->dependencies) ?
-            $records
-            : $this->prepareDependencies($records);
-
-        foreach ($records as $collection => $ids) {
-            foreach ($ids as $id) {
-                $this->insert($collection, $id);
+        if (empty($this->dependencies)) {
+            foreach ($records as $collection => $ids) {
+                foreach ($ids as $id) {
+                    $this->insert($collection, $id);
+                }
+            }
+        } else {
+            foreach ($this->prepareDependencies($records) as $recordToInsert) {
+                foreach ($recordToInsert as $collection => $ids) {
+                    foreach ($ids as $id) {
+                        $this->insert($collection, $id);
+                    }
+                }
             }
         }
     }
@@ -112,13 +118,8 @@ abstract class AbstractImplementation extends MockDataManipulation
      */
     protected function recordInsert($collection, $id)
     {
-        for ($i = 0; $i < count($this->insertedIntoDb); $i++) {
-            if (!in_array(array_keys($this->insertedIntoDb[$i]), $collection)) {
-                $this->insertedIntoDb[] = [$collection => [$id]];
-            } else {
-                $this->insertedIntoDb[$i][$collection][] = $id;
-                break;
-            }
+        if (!in_array([$collection => $id], $this->insertedIntoDb)) {
+            $this->insertedIntoDb[] = [$collection => $id];
         }
     }
 
