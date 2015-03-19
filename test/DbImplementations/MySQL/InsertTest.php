@@ -1,9 +1,9 @@
 <?php
-namespace Test\MySQL;
+namespace Test\DbImplementations\MySQL;
 
 use DbMockLibrary\DbImplementations\MySQL;
 
-class DeleteTest extends \Test\TestCase
+class InsertTest extends \Test\TestCase
 {
     /**
      * @var \PDO $pdo
@@ -22,10 +22,7 @@ class DeleteTest extends \Test\TestCase
         $stmt = $this->pdo->prepare('CREATE DATABASE `DbMockLibraryTest`');
         $stmt->execute();
 
-        $stmt = $this->pdo->prepare('CREATE TABLE IF NOT EXISTS DbMockLibraryTest.testTable (`id` INT, `foo` INT, PRIMARY KEY (`id`, `foo`))');
-        $stmt->execute();
-
-        $stmt = $this->pdo->prepare('INSERT INTO DbMockLibraryTest.testTable (`id`, `foo`) VALUES (0, 0)');
+        $stmt = $this->pdo->prepare('CREATE TABLE IF NOT EXISTS DbMockLibraryTest.testTable (`id` INT, `foo` INT, PRIMARY KEY (`id`))');
         $stmt->execute();
 
         MySQL::initMySQL(['testTable' => [1 => ['foo' => 0, 'id' => 0]]], 'localhost', 'DbMockLibraryTest', 'root', '', []);
@@ -33,15 +30,13 @@ class DeleteTest extends \Test\TestCase
 
     public function tearDown()
     {
-        $stmt = $this->pdo->prepare('DELETE FROM DbMockLibraryTest.testTable WHERE `id` = 0');
-        $stmt->execute();
-
         $stmt = $this->pdo->prepare('DROP DATABASE IF EXISTS `DbMockLibraryTest`');
         $stmt->execute();
 
-        if (MySQL::getInstance()) {
-            MySQL::getInstance()->destroy();
-        }
+        $stmt = $this->pdo->prepare('DELETE FROM DbMockLibraryTest.testTable WHERE `id` = 0');
+        $stmt->execute();
+
+        MySQL::getInstance()->destroy();
     }
 
     /**
@@ -54,20 +49,20 @@ class DeleteTest extends \Test\TestCase
         $stmt->execute();
         $result = $stmt->fetchAll();
         $reflection = new \ReflectionClass(MySQL::getInstance());
-        $deleteMethod = $reflection->getMethod('delete');
-        $deleteMethod->setAccessible(true);
+        $insertMethod = $reflection->getMethod('insert');
+        $insertMethod->setAccessible(true);
 
         // test
-        $this->assertCount(1, $result);
+        $this->assertCount(0, $result);
 
         // invoke logic
-        $deleteMethod->invoke(MySQL::getInstance(), 'testTable', 1);
+        $insertMethod->invoke(MySQL::getInstance(), 'testTable', 1);
 
         // prepare
         $stmt->execute();
         $result = $stmt->fetchAll();
 
         // test
-        $this->assertCount(0, $result);
+        $this->assertCount(1, $result);
     }
 }

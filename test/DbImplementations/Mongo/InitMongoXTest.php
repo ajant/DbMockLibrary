@@ -1,5 +1,5 @@
 <?php
-namespace Test\Mongo;
+namespace Test\DbImplementations\Mongo;
 
 use \DbMockLibrary\DbImplementations\Mongo;
 

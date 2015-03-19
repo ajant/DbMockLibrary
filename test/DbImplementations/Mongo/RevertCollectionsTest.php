@@ -1,7 +1,7 @@
 <?php
-namespace Test\MockDataManipulation;
+namespace Test\DbImplementations\Mongo;
 
-use \DbMockLibrary\MockDataManipulation;
+use \DbMockLibrary\DbImplementations\Mongo;
 
 class RevertCollectionsTest extends \Test\TestCase
 {
@@ -15,17 +15,17 @@ class RevertCollectionsTest extends \Test\TestCase
     public function test_function(array $data)
     {
         // prepare
-        MockDataManipulation::initDataContainer(['collection1' => ['id1' => [1], 'id2' => [2]], 'collection2' => ['id3' => [1], 'id4' => [2]]]);
-        $reflection = new \ReflectionClass('\DbMockLibrary\MockDataManipulation');
+        Mongo::initMongo(['collection1' => ['id1' => [1], 'id2' => [2]], 'collection2' => ['id3' => [1], 'id4' => [2]]], 'foo', []);
+        $reflection = new \ReflectionClass('\DbMockLibrary\DbImplementations\Mongo');
         $dataProperty = $reflection->getProperty('data');
         $dataProperty->setAccessible(true);
-        $dataProperty->setValue(MockDataManipulation::getInstance(), ['collection1' => [], 'collection2' => []]);
+        $dataProperty->setValue(Mongo::getInstance(), ['collection1' => [], 'collection2' => []]);
 
         // invoke logic
-        MockDataManipulation::getInstance()->revertCollections($data['collections']);
+        Mongo::getInstance()->revertCollections($data['collections']);
 
         // test
-        $this->assertEquals($data['expected'], $dataProperty->getValue(MockDataManipulation::getInstance()));
+        $this->assertEquals($data['expected'], $dataProperty->getValue(Mongo::getInstance()));
     }
 
     /**
@@ -38,14 +38,14 @@ class RevertCollectionsTest extends \Test\TestCase
             [
                 [
                     'collections'  => ['collection2'],
-                    'expected'     => ['collection1' => [], 'collection2' => null]
+                    'expected'     => ['collection1' => [], 'collection2' => ['id3' => [1], 'id4' => [2]]]
                 ]
             ],
             // #1 revert all collections
             [
                 [
                     'collections'  => [],
-                    'expected'     => ['collection1' => null, 'collection2' => null]
+                    'expected'     => ['collection1' => ['id1' => [1], 'id2' => [2]], 'collection2' => ['id3' => [1], 'id4' => [2]]]
                 ]
             ]
         ];

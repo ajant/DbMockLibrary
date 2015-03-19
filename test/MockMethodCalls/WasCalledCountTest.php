@@ -39,9 +39,9 @@ class WasCalledTest extends \Test\TestCase
 
         // invoke logic
         if (isset($data['arguments'])) {
-            $result = MockMethodCalls::getInstance()->wasCalled($data['class'], $data['method'], $data['arguments']);
+            $result = MockMethodCalls::getInstance()->wasCalledCount($data['class'], $data['method'], $data['arguments']);
         } else {
-            $result = MockMethodCalls::getInstance()->wasCalled($data['class'], $data['method']);
+            $result = MockMethodCalls::getInstance()->wasCalledCount($data['class'], $data['method']);
         }
 
         // test

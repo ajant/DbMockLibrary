@@ -1,5 +1,5 @@
 <?php
-namespace Test\MySQL;
+namespace Test\DbImplementations\MySQL;
 
 use \DbMockLibrary\DbImplementations\MySQL;
 

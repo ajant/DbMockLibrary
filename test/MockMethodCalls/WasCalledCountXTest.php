@@ -15,6 +15,6 @@ class WasCalledXTest extends \Test\TestCase
         MockMethodCalls::init(['collection' => ['id' => []]]);
 
         // invoke logic & test
-        MockMethodCalls::getInstance()->wasCalled(new \stdClass(), 'fooBar');
+        MockMethodCalls::getInstance()->wasCalledCount(new \stdClass(), 'fooBar');
     }
 }

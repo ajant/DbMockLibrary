@@ -1,7 +1,8 @@
 <?php
-namespace Test\DataContainer;
 
-use \DbMockLibrary\DataContainer;
+namespace Test\DbImplementations\Mongo;
+
+use \DbMockLibrary\DbImplementations\Mongo;
 
 class ResetDataTest extends \Test\TestCase
 {
@@ -11,9 +12,9 @@ class ResetDataTest extends \Test\TestCase
     public function test_function()
     {
         // prepare
-        $dataArray = [1];
-        DataContainer::initDataContainer($dataArray);
-        $reflection = new \ReflectionClass('\DbMockLibrary\DataContainer');
+        $dataArray = ['foo' => 1];
+        Mongo::initMongo($dataArray, 'fooBar', []);
+        $reflection = new \ReflectionClass('\DbMockLibrary\DbImplementations\Mongo');
         $staticProperties = $reflection->getStaticProperties();
         $dataProperty = $reflection->getProperty('data');
         $dataProperty->setAccessible(true);
@@ -28,9 +29,9 @@ class ResetDataTest extends \Test\TestCase
         $this->assertNotEquals($dataArray, $dataProperty->getValue($staticProperties['instance']));
 
         // invoke logic
-        DataContainer::getInstance()->resetData();
+        Mongo::getInstance()->resetData();
 
         // test
-        $this->assertEquals(null, $dataProperty->getValue($staticProperties['instance']));
+        $this->assertEquals($dataArray, $dataProperty->getValue($staticProperties['instance']));
     }
 }

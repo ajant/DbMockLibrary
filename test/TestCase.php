@@ -12,7 +12,9 @@ class TestCase extends \PHPUnit_Framework_TestCase
             new \ReflectionClass('\DbMockLibrary\Base'),
             new \ReflectionClass('\DbMockLibrary\MockMethodCalls'),
             new \ReflectionClass('\DbMockLibrary\DataContainer'),
-            new \ReflectionClass('\DbMockLibrary\DependencyHandler')
+            new \ReflectionClass('\DbMockLibrary\DependencyHandler'),
+            new \ReflectionClass('\DbMockLibrary\DbImplementations\Mongo'),
+            new \ReflectionClass('\DbMockLibrary\DbImplementations\MySQL')
         ];
 
         /* @var $reflection \ReflectionClass */
