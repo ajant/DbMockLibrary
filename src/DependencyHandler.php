@@ -47,7 +47,7 @@ class DependencyHandler extends DataContainer
         foreach ($wanted as $dependentCollection => $dependentIds) {
             foreach ($this->dependencies as $dependency) {
                 $toAdd          = [];
-                $onCollection   = reset(array_keys($dependency[static::ON]));
+                $onCollection   = key($tmp = $dependency[static::ON]);
                 $onField        = reset($dependency[static::ON]);
                 $dependentField = reset($dependency[static::DEPENDENT]);
                 // if dependency exists for the wanted collection
