@@ -4,7 +4,7 @@ namespace DbMockLibrary;
 
 use UnexpectedValueException;
 
-class MockMethodCalls extends DataContainer
+class MockMethodCalls extends Base
 {
     /**
      * @var array $callArguments
@@ -114,5 +114,14 @@ class MockMethodCalls extends DataContainer
     public function getCallArguments()
     {
         return $this->callArguments;
+    }
+
+    /**
+     * @return void
+     */
+    public function reset()
+    {
+        $this->callArguments = [];
+        $this->traces = [];
     }
 }
