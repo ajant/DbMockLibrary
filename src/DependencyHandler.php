@@ -151,7 +151,7 @@ class DependencyHandler extends DataContainer
     protected function validate(array $dependencies)
     {
         foreach ($dependencies as $dependency) {
-            $dependentCollection = key($dependency[static::DEPENDENT]);
+            $dependentCollection = key($tmp = $dependency[static::DEPENDENT]);
             $dependentColumn     = $dependency[static::DEPENDENT][$dependentCollection];
             if (!(isset($this->data[$dependentCollection]) || array_key_exists($dependentCollection, $this->data))) {
                 throw new InvalidDependencyException('Collection "' . $dependentCollection . '" does not exist');
