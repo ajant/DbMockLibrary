@@ -162,7 +162,7 @@ class DependencyHandler extends DataContainer
                 }
             }
 
-            $onCollection = reset(array_keys($dependency[static::ON]));
+            $onCollection = key($tmp = $dependency[static::ON]);
             $onColumn     = $dependency[static::ON][$onCollection];
             if (!(isset($this->data[$onCollection]) || array_key_exists($onCollection, $this->data))) {
                 throw new InvalidDependencyException('Collection "' . $onCollection . '" does not exist');
@@ -179,11 +179,11 @@ class DependencyHandler extends DataContainer
                 $newDependencies = [];
                 foreach ($levels[$i] as $collectionToCheck) {
                     foreach ($dependencies as $dependency) {
-                        if ($collectionToCheck == ($dependentCollection = reset(array_keys($dependency[static::DEPENDENT])))) {
-                            if ($i != 0 && ($onCollection = reset(array_keys($dependency[static::ON]))) == $collection) {
+                        if ($collectionToCheck == ($dependentCollection = key($tmp = $dependency[static::DEPENDENT]))) {
+                            if ($i != 0 && ($onCollection = key($tmp = $dependency[static::ON])) == $collection) {
                                 throw new InvalidDependencyException('Collection: "' . $collection . '" depends on itself via "' . $dependentCollection . '" collection');
                             } else {
-                                $newDependencies[] = $onCollection = reset(array_keys($dependency[static::ON]));
+                                $newDependencies[] = $onCollection = key($tmp = $dependency[static::ON]);
                             }
                         }
                     }
