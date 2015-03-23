@@ -20,7 +20,7 @@ class InitDataContainerTest extends \Test\TestCase
 
         // test
         $this->assertInstanceOf('\DbMockLibrary\DataContainer', $staticProperties['instance']);
-        $this->assertEquals(null, $staticProperties['initialData']);
+        $this->assertEquals($dataArray, $staticProperties['initialData']);
 
         // prepare
         $dataProperty = $reflection->getProperty('data');

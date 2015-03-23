@@ -31,6 +31,6 @@ class ResetDataTest extends \Test\TestCase
         DataContainer::getInstance()->resetData();
 
         // test
-        $this->assertEquals(null, $dataProperty->getValue($staticProperties['instance']));
+        $this->assertEquals($dataArray, $dataProperty->getValue($staticProperties['instance']));
     }
 }

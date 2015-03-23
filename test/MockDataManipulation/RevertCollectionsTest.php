@@ -38,14 +38,14 @@ class RevertCollectionsTest extends \Test\TestCase
             [
                 [
                     'collections'  => ['collection2'],
-                    'expected'     => ['collection1' => [], 'collection2' => null]
+                    'expected'     => ['collection1' => [], 'collection2' => ['id3' => [1], 'id4' => [2]]]
                 ]
             ],
             // #1 revert all collections
             [
                 [
                     'collections'  => [],
-                    'expected'     => ['collection1' => null, 'collection2' => null]
+                    'expected'     => ['collection1' => ['id1' => [1], 'id2' => [2]], 'collection2' => ['id3' => [1], 'id4' => [2]]]
                 ]
             ]
         ];

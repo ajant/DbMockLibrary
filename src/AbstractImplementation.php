@@ -4,7 +4,7 @@ namespace DbMockLibrary;
 
 use SimpleArrayLibrary\SimpleArrayLibrary;
 
-abstract class AbstractImplementation extends MockDataManipulation
+abstract class AbstractImplementation extends DependencyHandler
 {
     /**
      * @var array $insertedIntoDb

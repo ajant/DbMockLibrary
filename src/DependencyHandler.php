@@ -7,7 +7,7 @@ use DbMockLibrary\Exceptions\InvalidDependencyException;
 use DbMockLibrary\Exceptions\AlreadyInitializedException;
 use UnexpectedValueException;
 
-class DependencyHandler extends DataContainer
+class DependencyHandler extends MockDataManipulation
 {
     const DEPENDENT = 'dependentCollection';
     const ON = 'onCollection';
@@ -28,7 +28,8 @@ class DependencyHandler extends DataContainer
      */
     public static function initDependencyHandler(array $initialData, array $dependencies = [])
     {
-        static::initDataContainer($initialData);
+        static::init();
+        static::$instance->data = self::$initialData = $initialData;
         if ($dependencies) {
             static::$instance->validate($dependencies);
             static::$instance->dependencies = $dependencies;
