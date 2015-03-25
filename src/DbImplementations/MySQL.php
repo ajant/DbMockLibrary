@@ -117,6 +117,7 @@ class MySQL extends AbstractImplementation
         if (!$stmt->execute($data)) {
             throw new DbOperationFailedException('Insert failed');
         }
+        $this->recordInsert($collection, $id);
     }
 
     /**

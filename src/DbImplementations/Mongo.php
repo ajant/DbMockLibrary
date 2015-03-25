@@ -65,33 +65,34 @@ class Mongo extends AbstractImplementation
     /**
      * Insert into database
      *
-     * @param string $collectionName
+     * @param string $collection
      * @param string $id
      *
      * @throws DbOperationFailedException
      * @return mixed
      */
-    protected function insert($collectionName, $id)
+    protected function insert($collection, $id)
     {
-        $collection = static::$instance->database->selectCollection($collectionName);
-        if (!$collection->insert($this->data[$collectionName][$id], ['w' => 1])) {
+        $collection = static::$instance->database->selectCollection($collection);
+        if (!$collection->insert($this->data[$collection][$id], ['w' => 1])) {
             throw new DbOperationFailedException('Insert failed');
         }
+        $this->recordInsert($collection, $id);
     }
 
     /**
      * Delete from database
      *
-     * @param string $collectionName
+     * @param string $collection
      * @param string $id
      *
      * @throws DbOperationFailedException
      * @return void
      */
-    protected function delete($collectionName, $id)
+    protected function delete($collection, $id)
     {
-        $collection = static::$instance->database->selectCollection($collectionName);
-        if (!$collection->remove(['_id' => $this->data[$collectionName][$id]['_id']], ['w' => 1])) {
+        $collection = static::$instance->database->selectCollection($collection);
+        if (!$collection->remove(['_id' => $this->data[$collection][$id]['_id']], ['w' => 1])) {
             throw new DbOperationFailedException('Delete failed');
         }
     }
