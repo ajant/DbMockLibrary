@@ -65,11 +65,11 @@ class Mongo extends AbstractImplementation
     /**
      * Insert into database
      *
-     * @param string $collection
+     * @param string $collectionName
      * @param string $id
      *
+     * @return void
      * @throws DbOperationFailedException
-     * @return mixed
      */
     protected function insert($collectionName, $id)
     {
@@ -83,11 +83,11 @@ class Mongo extends AbstractImplementation
     /**
      * Delete from database
      *
-     * @param string $collection
+     * @param string $collectionName
      * @param string $id
      *
-     * @throws DbOperationFailedException
      * @return void
+     * @throws DbOperationFailedException
      */
     protected function delete($collectionName, $id)
     {

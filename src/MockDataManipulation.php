@@ -120,8 +120,12 @@ class MockDataManipulation extends DataContainer
         $collections = $this->getAllCollectionsIfEmpty($collections);
 
         foreach ($collections as $collection) {
-            $this->data[$collection] = static::$initialData[$collection];
-            $this->update($collection);
+            if (isset(static::$initialData[$collection]) || array_key_exists($collection, static::$initialData)) {
+                $this->data[$collection] = static::$initialData[$collection];
+                $this->update($collection);
+            } else {
+                unset($this->data[$collection]);
+            }
         }
     }
 

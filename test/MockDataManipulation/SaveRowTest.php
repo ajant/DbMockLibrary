@@ -39,7 +39,6 @@ class SaveRowTest extends \Test\TestCase
                     'value'      => ['fooBar' => 'fooBar'],
                     'collection' => 'collection',
                     'id'         => 'id',
-                    'field'      => '',
                     'strict'     => false,
                     'expected'   => ['collection' => ['id' => ['fooBar' => 'fooBar']]]
                 ]
@@ -50,7 +49,6 @@ class SaveRowTest extends \Test\TestCase
                     'value'      => ['fooBar' => 'fooBar'],
                     'collection' => 'collection',
                     'id'         => 'fooBar',
-                    'field'      => '',
                     'strict'     => false,
                     'expected'   => ['collection' => ['id' => ['field' => 'value'], 'fooBar' => ['fooBar' => 'fooBar']]]
                 ]

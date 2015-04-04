@@ -7,6 +7,8 @@ Db mocking & dummy data management library
 THIS IS NOT A STABLE VERSION. WORK IS IN PROGRESS.
 ==================================================
 
+[Wiki](https://github.com/ajant/DbMockLibrary/wiki)
+
 This is a database stubbing/mocking/prototyping library. Its principal uses are meant to be:
 
 1. testing the application without using actual database (by mocking data persistence layer, using DbMockLibrary)

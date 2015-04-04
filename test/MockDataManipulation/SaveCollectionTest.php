@@ -38,9 +38,6 @@ class SaveCollectionTest extends \Test\TestCase
                 [
                     'value'      => ['fooBar' => ['fooBar' => 'fooBar']],
                     'collection' => 'collection',
-                    'id'         => '',
-                    'field'      => '',
-                    'strict'     => false,
                     'expected'   => ['collection' => ['fooBar' => ['fooBar' => 'fooBar']]]
                 ]
             ],
@@ -49,9 +46,6 @@ class SaveCollectionTest extends \Test\TestCase
                 [
                     'value'      => ['fooBar' => ['fooBar' => 'fooBar']],
                     'collection' => 'fooBar',
-                    'id'         => '',
-                    'field'      => '',
-                    'strict'     => false,
                     'expected'   => ['collection' => ['id' => ['field' => 'value']], 'fooBar' => ['fooBar' => ['fooBar' => 'fooBar']]]
                 ]
             ]
