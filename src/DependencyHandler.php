@@ -90,17 +90,19 @@ class DependencyHandler extends MockDataManipulation
         }
 
         $return = [];
+        $j = 0;
         for ($i = 0; $i < count($extracted); $i++) {
-            // each element has just one key, collection, pointing to the array of ids
-            $collection               = key($extracted[$i]);
-            $return[$collection]      = (empty($return[$collection]) ?
-                $extracted[$i][$collection]
-                : array_merge($return[$collection], $extracted[$i][$collection]));
-            $return[$collection]['i'] = empty($return[$collection]['i']) ?
-                $i
-                : ($return[$collection]['i'] > $i ?
-                    $return[$collection]['i'] :
-                    $i);
+            foreach ($extracted[$i] as $collection => $data) {
+                $return[$collection]      = (empty($return[$collection]) ?
+                    $data
+                    : array_merge($return[$collection], $data));
+                $return[$collection]['i'] = empty($return[$collection]['i']) ?
+                    $j
+                    : ($return[$collection]['i'] > $j ?
+                        $return[$collection]['i'] :
+                        $j);
+                $j++;
+            }
         }
 
         return $return;
