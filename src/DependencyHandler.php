@@ -7,8 +7,10 @@ use DbMockLibrary\Exceptions\InvalidDependencyException;
 use DbMockLibrary\Exceptions\AlreadyInitializedException;
 use UnexpectedValueException;
 
-class DependencyHandler extends MockDataManipulation
+class DependencyHandler
 {
+    use MockDataManipulation;
+
     const DEPENDENT = 'dependentCollection';
     const ON = 'onCollection';
 

@@ -6,7 +6,7 @@ use DbMockLibrary\Exceptions\InvalidDependencyException;
 use DbMockLibrary\Exceptions\AlreadyInitializedException;
 use UnexpectedValueException;
 
-class Base
+trait Base
 {
     /**
      * @var static $instance

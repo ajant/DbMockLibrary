@@ -5,8 +5,10 @@ namespace DbMockLibrary;
 use SimpleArrayLibrary\SimpleArrayLibrary;
 use UnexpectedValueException;
 
-class MockDataManipulation extends DataContainer
+trait MockDataManipulation
 {
+    use DataContainer;
+
     /**
      * Deletes the record from the collection
      *

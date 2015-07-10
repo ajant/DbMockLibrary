@@ -7,8 +7,10 @@ use DbMockLibrary\Exceptions\AlreadyInitializedException;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
-class DataContainer extends Base
+trait DataContainer
 {
+    use Base;
+
     /**
      * @var array $data
      */
