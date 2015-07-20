@@ -34,7 +34,7 @@ class Base
     /**
      * @return void
      */
-    public function destroy()
+    public static function destroy()
     {
         static::$instance = null;
     }
