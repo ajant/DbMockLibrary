@@ -12,7 +12,7 @@ class DataContainer extends Base
     /**
      * @var array $data
      */
-    protected $data;
+    protected $data = [];
 
     /**
      * @var array $initialData
