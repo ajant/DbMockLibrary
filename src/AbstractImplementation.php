@@ -21,8 +21,10 @@ abstract class AbstractImplementation extends DependencyHandler
     public function setUp(array $records = [])
     {
         if (empty($records)) {
-            foreach ($this->data as $collection => $rows) {
-                $records[$collection] = array_keys($rows);
+            if (is_array($this->data)){
+                foreach ($this->data as $collection => $rows) {
+                    $records[$collection] = array_keys($rows);
+                }
             }
         } elseif (SimpleArrayLibrary::countMaxDepth($records) == 1) {
             $this->validateCollections($records);
@@ -66,8 +68,10 @@ abstract class AbstractImplementation extends DependencyHandler
     public function tearDown(array $records = [])
     {
         if (empty($records)) {
-            foreach ($this->data as $collection => $rows) {
-                $records[$collection] = array_keys($rows);
+            if (is_array($this->data)) {
+                foreach ($this->data as $collection => $rows) {
+                    $records[$collection] = array_keys($rows);
+                }
             }
         } elseif (SimpleArrayLibrary::countMaxDepth($records) == 1) {
             $this->validateCollections($records);
