@@ -1,6 +1,7 @@
 DbMockLibrary
 ==================
 [![Build Status](https://travis-ci.org/ajant/DbMockLibrary.svg?branch=master)](https://travis-ci.org/ajant/DbMockLibrary)
+[![Coverage Status](https://coveralls.io/repos/ajant/DbMockLibrary/badge.svg?branch=master&service=github)](https://coveralls.io/github/ajant/DbMockLibrary?branch=master)
 
 Db mocking & dummy data management library
 
