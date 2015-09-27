@@ -1,9 +1,10 @@
 <?php
-namespace Test\DataContainer;
+namespace DbMockLibrary\Test\DataContainer;
 
-use \DbMockLibrary\DataContainer;
+use DbMockLibrary\DataContainer;
+use DbMockLibrary\Test\TestCase;
 
-class ValidateIdsXTest extends \Test\TestCase
+class ValidateIdsXTest extends TestCase
 {
     /**
      * @dataProvider getData
@@ -17,12 +18,9 @@ class ValidateIdsXTest extends \Test\TestCase
         // prepare
         $this->setExpectedException($data['exception'], $data['errorMessage']);
         DataContainer::initDataContainer(['collection' => ['id' => []]]);
-        $reflection                = new \ReflectionClass(DataContainer::getInstance());
-        $validateCollectionsMethod = $reflection->getMethod('validateIds');
-        $validateCollectionsMethod->setAccessible(true);
 
         // invoke logic & test
-        $validateCollectionsMethod->invoke(DataContainer::getInstance(), $data['collection'], $data['id']);
+        $this->invokeMethodByReflection(DataContainer::getInstance(), 'validateIds', [$data['collection'], $data['id']]);
     }
 
     /**

@@ -1,9 +1,10 @@
 <?php
-namespace Test\Base;
+namespace DbMockLibrary\Test\Base;
 
-use \DbMockLibrary\Base;
+use DbMockLibrary\Base;
+use DbMockLibrary\Test\TestCase;
 
-class InitXTest extends \Test\TestCase
+class InitXTest extends TestCase
 {
     /**
      * @return void
@@ -14,7 +15,7 @@ class InitXTest extends \Test\TestCase
         $this->setExpectedException('\DbMockLibrary\Exceptions\AlreadyInitializedException', 'DbMockLibrary\Base has already been initialized');
 
         // invoke logic
-        Base::init([]);
-        Base::init([]);
+        Base::init();
+        Base::init();
     }
 }

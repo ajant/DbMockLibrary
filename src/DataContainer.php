@@ -28,10 +28,7 @@ class DataContainer extends Base
     public static function initDataContainer(array $initialData)
     {
         static::init();
-        static::$instance->data = self::$initialData = $initialData;
-
-        // fix/update $data array where needed
-        static::$instance->update();
+        static::$instance->data = static::$initialData = $initialData;
     }
 
     /**
@@ -43,20 +40,6 @@ class DataContainer extends Base
     {
         // clear all changes to $data array
         $this->data = static::$initialData;
-
-        // initialize $data array where needed
-        $this->update();
-    }
-
-    /**
-     * Initialize/change $data array where needed (maybe based on current time, or whatever)
-     *
-     * @param string $collection
-     *
-     * @return void
-     */
-    protected function update($collection = '')
-    {
     }
 
     /**

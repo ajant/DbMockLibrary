@@ -1,9 +1,10 @@
 <?php
-namespace Test\MockMethodCalls;
+namespace DbMockLibrary\Test\MockMethodCalls;
 
-use \DbMockLibrary\MockMethodCalls;
+use DbMockLibrary\MockMethodCalls;
+use DbMockLibrary\Test\TestCase;
 
-class WasCalledTest extends \Test\TestCase
+class WasCalledTest extends TestCase
 {
     /**
      * @dataProvider getData
@@ -15,7 +16,7 @@ class WasCalledTest extends \Test\TestCase
     public function test_function(array $data)
     {
         // prepare
-        MockMethodCalls::init([]);
+        MockMethodCalls::init();
         $traces = [
             [
                 [

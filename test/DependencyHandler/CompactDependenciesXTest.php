@@ -1,9 +1,10 @@
 <?php
-namespace Test\DependencyHandler;
+namespace DbMockLibrary\Test\DependencyHandler;
 
-use \DbMockLibrary\DependencyHandler;
+use DbMockLibrary\DependencyHandler;
+use DbMockLibrary\Test\TestCase;
 
-class CompactDependenciesXTest extends \Test\TestCase
+class CompactDependenciesXTest extends TestCase
 {
     /**
      * @param array $data

@@ -1,9 +1,10 @@
 <?php
-namespace Test\DbImplementations\Mongo;
+namespace DbMockLibrary\Test\DbImplementations\Mongo;
 
-use \DbMockLibrary\DbImplementations\Mongo;
+use DbMockLibrary\DbImplementations\Mongo;
+use DbMockLibrary\Test\TestCase;
 
-class InitXTest extends \Test\TestCase
+class InitXTest extends TestCase
 {
     public function tearDown()
     {

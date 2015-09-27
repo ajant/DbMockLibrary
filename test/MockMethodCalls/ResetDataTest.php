@@ -1,10 +1,11 @@
 <?php
 
-namespace Test\MockMethodCalls;
+namespace DbMockLibrary\Test\MockMethodCalls;
 
-use \DbMockLibrary\MockMethodCalls;
+use DbMockLibrary\MockMethodCalls;
+use DbMockLibrary\Test\TestCase;
 
-class ResetDataTest extends \Test\TestCase
+class ResetDataTest extends TestCase
 {
     /**
      * @return void

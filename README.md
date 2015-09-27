@@ -37,12 +37,60 @@ Requirements
 
 You'll need: PHP version 5.4+
 
-Quickstart
-==========
+Installation
+============
 Install the latest version with composer:<br/>
+```
 require "ajant/db-mock-library"
+```
 
 Auto-load the library:
+```php
 use DbMockLibrary/DbMockLibrary
+```
 
 As of now MySQL and MongoDb databases have been implemented.
+
+Quick start
+===========
+Here's the example, how to use the library for testing MySQL features of the application
+
+Bootstrapping:
+```php
+...
+// 2 tables, 2 rows each
+$data = [
+    'table_1' => [
+        -1 => ['foo' => 20, 'id' => -1],
+        -2 => ['foo' => 50, 'id' => -2]
+    ],
+    'table_2' => [
+        -1 => ['bar' => 30, 'id' => -1, 'table_1_id' => -1],
+        -2 => ['bar' => 10, 'id' => -2, 'table_1_id' => -2]
+    ]
+];
+// table_1_id is foreign key, referencing id column
+$dependencies = [
+    [
+        DependencyHandler::DEPENDENT => ['table_2' => 'table_1_id'],
+        DependencyHandler::ON        => ['table_1' => 'id']
+    ]
+];
+// initialize MySQL
+MySQL::initMySQL($data, 'localhost', 'DbMockLibraryTest', 'root', '', $dependencies);
+...
+```
+Test set up:
+```php
+...
+// inserts both rows of table_2 and both rows of table_1, because
+MySQL::getInstance()->setUp(['table_2' => [-1, -2]]);
+...
+```
+Test tear down:
+```php
+...
+// removes all rows inserted during set up phase
+MySQL::getInstance()->cleanUp();
+...
+```

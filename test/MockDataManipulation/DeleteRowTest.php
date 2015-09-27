@@ -1,9 +1,10 @@
 <?php
-namespace Test\MockDataManipulation;
+namespace DbMockLibrary\Test\MockDataManipulation;
 
-use \DbMockLibrary\MockDataManipulation;
+use DbMockLibrary\MockDataManipulation;
+use DbMockLibrary\Test\TestCase;
 
-class DeleteRowTest extends \Test\TestCase
+class DeleteRowTest extends TestCase
 {
     /**
      * @return void

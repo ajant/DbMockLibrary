@@ -1,9 +1,10 @@
 <?php
-namespace Test\DbImplementations\MySQL;
+namespace DbMockLibrary\Test\DbImplementations\MySQL;
 
-use \DbMockLibrary\DbImplementations\MySQL;
+use DbMockLibrary\DbImplementations\MySQL;
+use DbMockLibrary\Test\TestCase;
 
-class InitXTest extends \Test\TestCase
+class InitXTest extends TestCase
 {
     /**
      * @var \PDO $pdo
@@ -28,12 +29,10 @@ class InitXTest extends \Test\TestCase
 
     public function tearDown()
     {
+        parent::tearDown();
+
         $stmt = $this->pdo->prepare('DROP DATABASE IF EXISTS `DbMockLibraryTest`');
         $stmt->execute();
-
-        if (MySQL::getInstance()) {
-            MySQL::getInstance()->destroy();
-        }
     }
 
     /**

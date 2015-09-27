@@ -1,9 +1,10 @@
 <?php
-namespace Test\MockMethodCalls;
+namespace DbMockLibrary\Test\MockMethodCalls;
 
-use \DbMockLibrary\MockMethodCalls;
+use DbMockLibrary\MockMethodCalls;
+use DbMockLibrary\Test\TestCase;
 
-class GetFullTraceDetailsXTest extends \Test\TestCase
+class GetFullTraceDetailsXTest extends TestCase
 {
     /**
      * @return void
@@ -12,7 +13,7 @@ class GetFullTraceDetailsXTest extends \Test\TestCase
     {
         // prepare
         $this->setExpectedException('\UnexpectedValueException', 'Invalid method');
-        MockMethodCalls::init(['collection' => []]);
+        MockMethodCalls::init();
         $reflection = new \ReflectionClass(MockMethodCalls::getInstance());
         $validateCollectionsMethod = $reflection->getMethod('getFullTraceDetails');
         $validateCollectionsMethod->setAccessible(true);

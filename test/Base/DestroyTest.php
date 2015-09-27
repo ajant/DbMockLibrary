@@ -1,9 +1,10 @@
 <?php
-namespace Test\Base;
+namespace DbMockLibrary\Test\Base;
 
-use \DbMockLibrary\Base;
+use DbMockLibrary\Base;
+use DbMockLibrary\Test\TestCase;
 
-class DestroyTest extends \Test\TestCase
+class DestroyTest extends TestCase
 {
     /**
      * @return void
@@ -11,7 +12,7 @@ class DestroyTest extends \Test\TestCase
     public function test_function()
     {
         // prepare
-        Base::init([]);
+        Base::init();
         $reflection = new \ReflectionClass('\DbMockLibrary\Base');
         $staticProperties = $reflection->getStaticProperties();
 

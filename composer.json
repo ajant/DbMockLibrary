@@ -1,6 +1,5 @@
 {
 	"name": "ajant/db-mock-library",
-	"description": "Db mocking & stabbing library",
 	"authors": [
 		{
 			"name": "Jovanovic Aleksandar",
@@ -15,12 +14,14 @@
 		"ajant/simple-array-library": ">=1.0.0"
 	},
 	"require-dev": {
-	  "phpunit/phpunit": "4.*"
+	  "phpunit/phpunit": "4.*",
+	  "satooshi/php-coveralls": "dev-master",
+	  "mockery/mockery": "dev-master"
 	},
 	"autoload": {
 		"psr-4": {
 			"DbMockLibrary\\": "src",
-			"Test\\": "test"
+			"DbMockLibrary\\Test\\": "test"
 		}
 	}
 }

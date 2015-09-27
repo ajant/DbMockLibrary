@@ -1,9 +1,11 @@
 <?php
-namespace Test\DbImplementations\Mongo;
+namespace DbMockLibrary\Test\DbImplementations\Mongo;
 
 use DbMockLibrary\DbImplementations\Mongo;
+use DbMockLibrary\Test\TestCase;
+use MongoClient;
 
-class InsertTest extends \Test\TestCase
+class InsertTest extends TestCase
 {
     /**
      * @var \MongoDB $database
@@ -13,7 +15,7 @@ class InsertTest extends \Test\TestCase
     public function setUp()
     {
         if (is_null($this->database)) {
-            $client = new \MongoClient();
+            $client = new MongoClient();
             $this->database = $client->selectDB('DbMockLibraryTest');
         }
 

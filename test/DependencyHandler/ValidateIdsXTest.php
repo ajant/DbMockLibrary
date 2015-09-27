@@ -1,9 +1,10 @@
 <?php
-namespace Test\DependencyHandler;
+namespace DbMockLibrary\Test\DependencyHandler;
 
-use \DbMockLibrary\DependencyHandler;
+use DbMockLibrary\DependencyHandler;
+use DbMockLibrary\Test\TestCase;
 
-class ValidateIdsXTest extends \Test\TestCase
+class ValidateIdsXTest extends TestCase
 {
     /**
      * @dataProvider getData

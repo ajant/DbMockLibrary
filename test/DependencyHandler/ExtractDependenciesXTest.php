@@ -1,9 +1,10 @@
 <?php
-namespace Test\DependencyHandler;
+namespace DbMockLibrary\Test\DependencyHandler;
 
-use \DbMockLibrary\DependencyHandler;
+use DbMockLibrary\DependencyHandler;
+use DbMockLibrary\Test\TestCase;
 
-class ExtractDependenciesXTest extends \Test\TestCase
+class ExtractDependenciesXTest extends TestCase
 {
     /**
      * @return void

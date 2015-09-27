@@ -1,9 +1,10 @@
 <?php
-namespace Test\Base;
+namespace DbMockLibrary\Test\Base;
 
-use \DbMockLibrary\Base;
+use DbMockLibrary\Base;
+use DbMockLibrary\Test\TestCase;
 
-class GetInstanceXTest extends \Test\TestCase
+class GetInstanceXTest extends TestCase
 {
     /**
      * @return void

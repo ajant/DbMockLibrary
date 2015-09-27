@@ -46,9 +46,6 @@ class Mongo extends AbstractImplementation
             static::initDependencyHandler($initialData, $dependencies);
             $client                     = new \MongoClient();
             static::$instance->database = $client->selectDB($database);
-
-            // edit $data array where needed
-            static::$instance->update();
         } else {
             throw new AlreadyInitializedException('Mongo library already initialized');
         }
@@ -74,7 +71,9 @@ class Mongo extends AbstractImplementation
     protected function insert($collectionName, $id)
     {
         $collection = static::$instance->database->selectCollection($collectionName);
-        if (!$collection->insert($this->data[$collectionName][$id], ['w' => 1])) {
+        // throws MongoCursorException
+        $status = $collection->insert($this->data[$collectionName][$id], ['w' => 1]);
+        if (!empty($status['err'])) {
             throw new DbOperationFailedException('Insert failed');
         }
         $this->recordInsert($collectionName, $id);
@@ -92,7 +91,9 @@ class Mongo extends AbstractImplementation
     protected function delete($collectionName, $id)
     {
         $collection = static::$instance->database->selectCollection($collectionName);
-        if (!$collection->remove(['_id' => $this->data[$collectionName][$id]['_id']], ['w' => 1])) {
+        // throws MongoCursorException
+        $status = $collection->remove(['_id' => $this->data[$collectionName][$id]['_id']], ['w' => 1]);
+        if (!empty($status['err'])) {
             throw new DbOperationFailedException('Delete failed');
         }
     }

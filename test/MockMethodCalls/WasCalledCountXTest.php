@@ -1,9 +1,10 @@
 <?php
-namespace Test\MockMethodCalls;
+namespace DbMockLibrary\Test\MockMethodCalls;
 
-use \DbMockLibrary\MockMethodCalls;
+use DbMockLibrary\MockMethodCalls;
+use DbMockLibrary\Test\TestCase;
 
-class WasCalledXTest extends \Test\TestCase
+class WasCalledXTest extends TestCase
 {
     /**
      * @return void
@@ -12,7 +13,7 @@ class WasCalledXTest extends \Test\TestCase
     {
         // prepare
         $this->setExpectedException('\UnexpectedValueException', 'Invalid method');
-        MockMethodCalls::init(['collection' => ['id' => []]]);
+        MockMethodCalls::init();
 
         // invoke logic & test
         MockMethodCalls::getInstance()->wasCalledCount(new \stdClass(), 'fooBar');

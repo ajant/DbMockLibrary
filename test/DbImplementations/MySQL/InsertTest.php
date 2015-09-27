@@ -1,9 +1,10 @@
 <?php
-namespace Test\DbImplementations\MySQL;
+namespace DbMockLibrary\Test\DbImplementations\MySQL;
 
 use DbMockLibrary\DbImplementations\MySQL;
+use DbMockLibrary\Test\TestCase;
 
-class InsertTest extends \Test\TestCase
+class InsertTest extends TestCase
 {
     /**
      * @var \PDO $pdo

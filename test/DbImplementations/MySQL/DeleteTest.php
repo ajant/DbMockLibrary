@@ -1,9 +1,11 @@
 <?php
-namespace Test\DbImplementations\MySQL;
+namespace DbMockLibrary\Test\DbImplementations\MySQL;
 
 use DbMockLibrary\DbImplementations\MySQL;
+use DbMockLibrary\Test\TestCase;
+use ReflectionClass;
 
-class DeleteTest extends \Test\TestCase
+class DeleteTest extends TestCase
 {
     /**
      * @var \PDO $pdo
@@ -53,7 +55,7 @@ class DeleteTest extends \Test\TestCase
         $stmt = $this->pdo->prepare('SELECT * FROM `DbMockLibraryTest`.testTable WHERE `id` = 0');
         $stmt->execute();
         $result = $stmt->fetchAll();
-        $reflection = new \ReflectionClass(MySQL::getInstance());
+        $reflection = new ReflectionClass(MySQL::getInstance());
         $deleteMethod = $reflection->getMethod('delete');
         $deleteMethod->setAccessible(true);
 

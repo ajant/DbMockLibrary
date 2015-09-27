@@ -17,11 +17,6 @@ class MySQL extends AbstractImplementation
     protected static $instance;
 
     /**
-     * @var array $initialData
-     */
-    protected static $initialData;
-
-    /**
      * @var PDO $connection
      */
     protected $connection;
@@ -80,20 +75,9 @@ class MySQL extends AbstractImplementation
                     }
                 }
             }
-
-            // edit $data array where needed
-            static::$instance->update();
         } else {
             throw new AlreadyInitializedException('MySQL library already initialized');
         }
-    }
-
-    /**
-     * @return static
-     */
-    public static function getInstance()
-    {
-        return static::$instance;
     }
 
     /**

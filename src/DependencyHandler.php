@@ -22,14 +22,13 @@ class DependencyHandler extends MockDataManipulation
      *
      * @param array $dependencies
      *
-     * @return MockLibrary
      * @throws AlreadyInitializedException
      * @throws InvalidDependencyException
      */
     public static function initDependencyHandler(array $initialData, array $dependencies = [])
     {
         static::init();
-        static::$instance->data = self::$initialData = $initialData;
+        static::$instance->data = static::$initialData = $initialData;
         if ($dependencies) {
             static::$instance->validate($dependencies);
             static::$instance->dependencies = $dependencies;
@@ -47,9 +46,9 @@ class DependencyHandler extends MockDataManipulation
         $extracted = empty($extracted) ? [$wanted] : $extracted;
         foreach ($wanted as $dependentCollection => $dependentIds) {
             foreach ($this->dependencies as $dependency) {
-                $toAdd          = [];
-                $onCollection   = key($tmp = $dependency[static::ON]);
-                $onField        = reset($dependency[static::ON]);
+                $toAdd = [];
+                $onCollection = key($tmp = $dependency[static::ON]);
+                $onField = reset($dependency[static::ON]);
                 $dependentField = reset($dependency[static::DEPENDENT]);
                 // if dependency exists for the wanted collection
                 if (!empty($dependency[static::DEPENDENT][$dependentCollection])) {
@@ -58,7 +57,7 @@ class DependencyHandler extends MockDataManipulation
                         foreach ($dependentIds as $dependentId) {
                             if ($onRow[$onField] == $this->data[$dependentCollection][$dependentId][$dependentField]) {
                                 $toAdd[$onId] = true;
-                                $addedFor[]   = $dependentId;
+                                $addedFor[] = $dependentId;
                             }
                         }
                     }
@@ -68,9 +67,9 @@ class DependencyHandler extends MockDataManipulation
                             . '" in ' . $dependentCollection . ' on ' . $onCollection . ' dependency'
                         );
                     }
-                    $newWanted   = [$onCollection => array_keys($toAdd)];
+                    $newWanted = [$onCollection => array_keys($toAdd)];
                     $extracted[] = $newWanted;
-                    $extracted   = $this->extractDependencies($newWanted, $extracted);
+                    $extracted = $this->extractDependencies($newWanted, $extracted);
                 }
             }
         }
@@ -93,14 +92,10 @@ class DependencyHandler extends MockDataManipulation
         $j = 0;
         for ($i = 0; $i < count($extracted); $i++) {
             foreach ($extracted[$i] as $collection => $data) {
-                $return[$collection]      = (empty($return[$collection]) ?
+                $return[$collection] = empty($return[$collection]) ?
                     $data
-                    : array_merge($return[$collection], $data));
-                $return[$collection]['i'] = empty($return[$collection]['i']) ?
-                    $j
-                    : ($return[$collection]['i'] > $j ?
-                        $return[$collection]['i'] :
-                        $j);
+                    : array_merge($return[$collection], $data);
+                $return[$collection]['i'] = $j;
                 $j++;
             }
         }
@@ -137,7 +132,7 @@ class DependencyHandler extends MockDataManipulation
      *
      * @return array
      */
-    public function prepareDependencies(array $wanted)
+    protected function prepareDependencies(array $wanted)
     {
         $return = $this->extractDependencies($wanted);
         $return = $this->repackDependencies($return);
@@ -155,7 +150,7 @@ class DependencyHandler extends MockDataManipulation
     {
         foreach ($dependencies as $dependency) {
             $dependentCollection = key($tmp = $dependency[static::DEPENDENT]);
-            $dependentColumn     = $dependency[static::DEPENDENT][$dependentCollection];
+            $dependentColumn = $dependency[static::DEPENDENT][$dependentCollection];
             if (!(isset($this->data[$dependentCollection]) || array_key_exists($dependentCollection, $this->data))) {
                 throw new InvalidDependencyException('Collection "' . $dependentCollection . '" does not exist');
             }
@@ -166,7 +161,7 @@ class DependencyHandler extends MockDataManipulation
             }
 
             $onCollection = key($tmp = $dependency[static::ON]);
-            $onColumn     = $dependency[static::ON][$onCollection];
+            $onColumn = $dependency[static::ON][$onCollection];
             if (!(isset($this->data[$onCollection]) || array_key_exists($onCollection, $this->data))) {
                 throw new InvalidDependencyException('Collection "' . $onCollection . '" does not exist');
             }

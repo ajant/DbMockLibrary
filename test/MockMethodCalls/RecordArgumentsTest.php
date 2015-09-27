@@ -1,9 +1,10 @@
 <?php
-namespace Test\MockMethodCalls;
+namespace DbMockLibrary\Test\MockMethodCalls;
 
-use \DbMockLibrary\MockMethodCalls;
+use DbMockLibrary\MockMethodCalls;
+use DbMockLibrary\Test\TestCase;
 
-class RecordArgumentsTest extends \Test\TestCase
+class RecordArgumentsTest extends TestCase
 {
     /**
      * @return void
@@ -11,7 +12,7 @@ class RecordArgumentsTest extends \Test\TestCase
     public function test_function()
     {
         // invoke logic
-        MockMethodCalls::init([]);
+        MockMethodCalls::init();
 
         // prepare
         $reflection = new \ReflectionClass('\DbMockLibrary\MockMethodCalls');

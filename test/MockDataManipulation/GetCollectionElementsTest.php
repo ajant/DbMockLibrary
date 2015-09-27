@@ -1,9 +1,10 @@
 <?php
-namespace Test\MockDataManipulation;
+namespace DbMockLibrary\Test\MockDataManipulation;
 
-use \DbMockLibrary\MockDataManipulation;
+use DbMockLibrary\MockDataManipulation;
+use DbMockLibrary\Test\TestCase;
 
-class GetCollectionElementsTest extends \Test\TestCase
+class GetCollectionElementsTest extends TestCase
 {
     /**
      * @dataProvider getData

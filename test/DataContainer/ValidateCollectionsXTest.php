@@ -1,9 +1,10 @@
 <?php
-namespace Test\DataContainer;
+namespace DbMockLibrary\Test\DataContainer;
 
-use \DbMockLibrary\DataContainer;
+use DbMockLibrary\DataContainer;
+use DbMockLibrary\Test\TestCase;
 
-class ValidateCollectionsXTest extends \Test\TestCase
+class ValidateCollectionsXTest extends TestCase
 {
     /**
      * @return void

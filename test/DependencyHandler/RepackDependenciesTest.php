@@ -1,9 +1,10 @@
 <?php
-namespace Test\DependencyHandler;
+namespace DbMockLibrary\Test\DependencyHandler;
 
-use \DbMockLibrary\DependencyHandler;
+use DbMockLibrary\DependencyHandler;
+use DbMockLibrary\Test\TestCase;
 
-class RepackDependenciesTest extends \Test\TestCase
+class RepackDependenciesTest extends TestCase
 {
     /**
      * @return void
@@ -18,52 +19,45 @@ class RepackDependenciesTest extends \Test\TestCase
                 ]
             ],
             [
-                'c' =>
-                    [
-                        'c1'
-                    ]
+                'c' => [
+                    'c1'
+                ]
             ],
             [
-                'd' =>
-                    [
-                        'd1',
-                        'd2'
-                    ]
+                'd' => [
+                    'd1',
+                    'd2'
+                ]
             ],
             [
-                'b' =>
-                    ['b1']
+                'b' => ['b1']
             ],
             [
-                'd' =>
-                    ['d1']
+                'd' => ['d1']
             ]
         ];
-        $expected  = [
+        $expected = [
             'a' => [
                 'i' => 0,
                 'a1'
             ],
-            'c' =>
-                [
-                    'i' => 1,
-                    'c1'
-                ],
-            'b' =>
-                [
-                    'i' => 3,
-                    'b1'
-                ],
-            'd' =>
-                [
-                    'i' => 4,
-                    'd1',
-                    'd2',
-                    'd1'
-                ]
+            'c' => [
+                'i' => 1,
+                'c1'
+            ],
+            'b' => [
+                'i' => 3,
+                'b1'
+            ],
+            'd' => [
+                'i' => 4,
+                'd1',
+                'd2',
+                'd1'
+            ]
         ];
         DependencyHandler::initDependencyHandler([]);
-        $reflection         = new \ReflectionClass('\DbMockLibrary\DependencyHandler');
+        $reflection = new \ReflectionClass('\DbMockLibrary\DependencyHandler');
         $dependenciesMethod = $reflection->getMethod('repackDependencies');
         $dependenciesMethod->setAccessible(true);
 

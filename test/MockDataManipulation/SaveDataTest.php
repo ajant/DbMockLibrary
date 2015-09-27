@@ -1,9 +1,10 @@
 <?php
-namespace Test\MockDataManipulation;
+namespace DbMockLibrary\Test\MockDataManipulation;
 
-use \DbMockLibrary\MockDataManipulation;
+use DbMockLibrary\MockDataManipulation;
+use DbMockLibrary\Test\TestCase;
 
-class SaveDataTest extends \Test\TestCase
+class SaveDataTest extends TestCase
 {
     /**
      * @dataProvider getData
@@ -21,7 +22,7 @@ class SaveDataTest extends \Test\TestCase
         $dataProperty->setAccessible(true);
 
         // invoke logic
-        MockDataManipulation::getInstance()->saveData($data['value'], $data['collection'], $data['id'], $data['field'], $data['strict']);
+        MockDataManipulation::getInstance()->saveData($data['value'], $data['collection'], $data['id'], $data['field']);
 
         // test
         $this->assertEquals($data['expected'], $dataProperty->getValue(MockDataManipulation::getInstance()));
@@ -40,7 +41,6 @@ class SaveDataTest extends \Test\TestCase
                     'collection' => '',
                     'id'         => '',
                     'field'      => '',
-                    'strict'     => false,
                     'expected'   => ['fooBar' => ['fooBar' => ['fooBar' => 'fooBar']]]
                 ]
             ],
@@ -51,7 +51,6 @@ class SaveDataTest extends \Test\TestCase
                     'collection' => 'collection',
                     'id'         => '',
                     'field'      => '',
-                    'strict'     => false,
                     'expected'   => ['collection' => ['fooBar' => ['fooBar' => 'fooBar']]]
                 ]
             ],
@@ -62,7 +61,6 @@ class SaveDataTest extends \Test\TestCase
                     'collection' => 'fooBar',
                     'id'         => '',
                     'field'      => '',
-                    'strict'     => false,
                     'expected'   => ['collection' => ['id' => ['field' => 'value']], 'fooBar' => ['fooBar' => ['fooBar' => 'fooBar']]]
                 ]
             ],
@@ -73,7 +71,6 @@ class SaveDataTest extends \Test\TestCase
                     'collection' => 'collection',
                     'id'         => 'id',
                     'field'      => '',
-                    'strict'     => false,
                     'expected'   => ['collection' => ['id' => ['fooBar' => 'fooBar']]]
                 ]
             ],
@@ -84,7 +81,6 @@ class SaveDataTest extends \Test\TestCase
                     'collection' => 'collection',
                     'id'         => 'fooBar',
                     'field'      => '',
-                    'strict'     => false,
                     'expected'   => ['collection' => ['id' => ['field' => 'value'], 'fooBar' => ['fooBar' => 'fooBar']]]
                 ]
             ],
@@ -95,7 +91,6 @@ class SaveDataTest extends \Test\TestCase
                     'collection' => 'collection',
                     'id'         => 'id',
                     'field'      => 'field',
-                    'strict'     => false,
                     'expected'   => ['collection' => ['id' => ['field' => 'fooBar']]]
                 ]
             ],
@@ -106,7 +101,6 @@ class SaveDataTest extends \Test\TestCase
                     'collection' => 'collection',
                     'id'         => 'id',
                     'field'      => 'fooBar',
-                    'strict'     => false,
                     'expected'   => ['collection' => ['id' => ['field' => 'value', 'fooBar' => 'fooBar']]]
                 ]
             ]
