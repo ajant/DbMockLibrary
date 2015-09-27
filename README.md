@@ -4,8 +4,6 @@ DbMockLibrary
 
 Db mocking & dummy data management library
 
-THIS IS NOT A STABLE VERSION. WORK IS IN PROGRESS.
-==================================================
 
 [Wiki](https://github.com/ajant/DbMockLibrary/wiki)
 
