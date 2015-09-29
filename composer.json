@@ -11,7 +11,7 @@
   "homepage": "https://github.com/ajant/DbMockLibrary",
 	"require": {
 		"php": ">=5.4.0",
-		"ajant/simple-array-library": ">=1.0.0"
+		"ajant/simple-array-library": ">=2"
 	},
 	"require-dev": {
 	  "phpunit/phpunit": "4.*",
