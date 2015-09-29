@@ -40,7 +40,7 @@ Installation
 ============
 Install the latest version with composer:<br/>
 ```
-require "ajant/db-mock-library"
+require "ajant/db-mock-library": ~1
 ```
 
 Auto-load the library:
