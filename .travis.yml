@@ -4,6 +4,7 @@ php:
   - 5.4
 
 before_script:
+#  - psql -c 'create database db-mock-library;' -U postgres
   - mkdir -p build/logs
   - composer install
   - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini

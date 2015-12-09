@@ -21,7 +21,8 @@ class TestCase extends PHPUnit_Framework_TestCase
             new ReflectionClass('\DbMockLibrary\DataContainer'),
             new ReflectionClass('\DbMockLibrary\DependencyHandler'),
             new ReflectionClass('\DbMockLibrary\DbImplementations\Mongo'),
-            new ReflectionClass('\DbMockLibrary\DbImplementations\MySQL')
+            new ReflectionClass('\DbMockLibrary\DbImplementations\MySQL'),
+            new ReflectionClass('\DbMockLibrary\DbImplementations\Postgres'),
         ];
 
         /* @var $reflection ReflectionClass */
