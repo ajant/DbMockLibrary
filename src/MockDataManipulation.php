@@ -154,7 +154,7 @@ class MockDataManipulation extends DataContainer
     public function saveData($value, $collection = '', $id = '', $field = '')
     {
         if (!empty($collection)) {
-            if (!empty($id)) {
+            if (!empty($id) || $id === 0 || $id === '0') {
                 if (!empty($field)) {
                     if (!isset($this->data[$collection])) {
                         throw new UnexpectedValueException('Non existing collection');
