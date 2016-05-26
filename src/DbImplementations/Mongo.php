@@ -5,6 +5,8 @@ namespace DbMockLibrary\DbImplementations;
 use DbMockLibrary\Exceptions\AlreadyInitializedException;
 use DbMockLibrary\Exceptions\DbOperationFailedException;
 use DbMockLibrary\AbstractImplementation;
+use Exception;
+use MongoDB\Client;
 use SimpleArrayLibrary\SimpleArrayLibrary;
 use UnexpectedValueException;
 
@@ -44,8 +46,8 @@ class Mongo extends AbstractImplementation
 
             static::$initialData = $initialData;
             static::initDependencyHandler($initialData, $dependencies);
-            $client                     = new \MongoClient();
-            static::$instance->database = $client->selectDB($database);
+            $client                     = new Client();
+            static::$instance->database = $client->selectDatabase($database);
         } else {
             throw new AlreadyInitializedException('Mongo library already initialized');
         }
@@ -71,8 +73,11 @@ class Mongo extends AbstractImplementation
     protected function insert($collectionName, $id)
     {
         $collection = static::$instance->database->selectCollection($collectionName);
-        // throws MongoCursorException
-        $status = $collection->insert($this->data[$collectionName][$id], ['w' => 1]);
+        try {
+            $status = $collection->insert($this->data[$collectionName][$id], ['w' => 1]);
+        } catch (Exception $e) {
+            throw new DbOperationFailedException('Insert failed');
+        }
         if (!empty($status['err'])) {
             throw new DbOperationFailedException('Insert failed');
         }
@@ -91,8 +96,11 @@ class Mongo extends AbstractImplementation
     protected function delete($collectionName, $id)
     {
         $collection = static::$instance->database->selectCollection($collectionName);
-        // throws MongoCursorException
-        $status = $collection->remove(['_id' => $this->data[$collectionName][$id]['_id']], ['w' => 1]);
+        try {
+            $status = $collection->remove(['_id' => $this->data[$collectionName][$id]['_id']], ['w' => 1]);
+        } catch (Exception $e) {
+            throw new DbOperationFailedException('Delete failed');
+        }
         if (!empty($status['err'])) {
             throw new DbOperationFailedException('Delete failed');
         }
