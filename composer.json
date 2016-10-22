@@ -1,27 +1,28 @@
 {
-	"name": "ajant/db-mock-library",
-	"authors": [
-		{
-			"name": "Jovanovic Aleksandar",
-			"email": "ajant.github@gmail.com"
-		}
-	],
+  "name": "ajant/db-mock-library",
+  "authors": [
+    {
+      "name": "Jovanovic Aleksandar",
+      "email": "ajant.github@gmail.com"
+    }
+  ],
   "license": "MIT",
   "description": "Db mocking & dummy data management library",
   "homepage": "https://github.com/ajant/DbMockLibrary",
-	"require": {
-		"php": ">=5.4.0",
-		"ajant/simple-array-library": ">=2"
-	},
-	"require-dev": {
-	  "phpunit/phpunit": ">=4",
-	  "satooshi/php-coveralls": "^1.0.1",
-	  "mockery/mockery": "^0.9"
-	},
-	"autoload": {
-		"psr-4": {
-			"DbMockLibrary\\": "src",
-			"DbMockLibrary\\Test\\": "test"
-		}
-	}
+  "require": {
+    "php": ">=5.4.0",
+    "ajant/simple-array-library": ">=2",
+    "elasticsearch/elasticsearch": "~2.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": ">=4",
+    "satooshi/php-coveralls": "^1.0.1",
+    "mockery/mockery": "^0.9"
+  },
+  "autoload": {
+    "psr-4": {
+      "DbMockLibrary\\": "src",
+      "DbMockLibrary\\Test\\": "test"
+    }
+  }
 }
