@@ -21,7 +21,7 @@ class DeleteTest extends ElasticsearchTestCase
             unset($data['index']);
             $data = [$this->testIndex => [1 => $data]];
         }
-        Elasticsearch::initElasticsearch($this->hosts, $data, [], [$this->testIndex => $indexType]);
+        Elasticsearch::initElasticsearch($this->client, $data, [], [$this->testIndex => $indexType]);
         $beforeCount = $this->client->count([
             'index' => $this->testIndex,
             'type' => $indexType,

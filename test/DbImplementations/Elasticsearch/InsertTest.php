@@ -22,7 +22,7 @@ class InsertTest extends ElasticsearchTestCase
             $this->testIndex => $indexType,
         ];
 
-        Elasticsearch::initElasticsearch($this->hosts, [
+        Elasticsearch::initElasticsearch($this->client, [
             $this->testIndex => $data,
         ], [], $this->indexTypes);
 

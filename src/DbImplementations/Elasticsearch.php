@@ -5,9 +5,7 @@ namespace DbMockLibrary\DbImplementations;
 use DbMockLibrary\AbstractImplementation;
 use DbMockLibrary\Exceptions\AlreadyInitializedException;
 use DbMockLibrary\Exceptions\DbOperationFailedException;
-use DbMockLibrary\Exceptions\InvalidDependencyException;
 use Elasticsearch\Client;
-use Elasticsearch\ClientBuilder;
 use Exception;
 use InvalidArgumentException;
 use SimpleArrayLibrary\SimpleArrayLibrary;
@@ -36,16 +34,14 @@ class Elasticsearch extends AbstractImplementation
     protected $client;
 
     /**
-     * @param array $hosts
+     * @param Client $client
      * @param array $initialData
      * @param array $dependencies
      * @param array $indexTypes
      *
      * @throws AlreadyInitializedException
-     * @throws UnexpectedValueException
-     * @throws InvalidDependencyException
      */
-    public static function initElasticsearch(array $hosts, array $initialData, array $dependencies, array $indexTypes)
+    public static function initElasticsearch(Client $client, array $initialData, array $dependencies, array $indexTypes)
     {
         if (!static::$instance) {
             if ($initialData !== [] && !SimpleArrayLibrary::isAssociative($initialData)) {
@@ -54,7 +50,7 @@ class Elasticsearch extends AbstractImplementation
 
             static::$initialData = $initialData;
             static::initDependencyHandler($initialData, $dependencies);
-            static::$instance->client = ClientBuilder::create()->setHosts($hosts)->build();
+            static::$instance->client = $client;
             static::$indexTypes = $indexTypes;
 
             // make changes reflect immediately
@@ -79,32 +75,23 @@ class Elasticsearch extends AbstractImplementation
         $client = static::$instance->client;
         try {
             $indexType = $this->getType($indexName);
+            $indexData = [
+                'index' => $indexName,
+                'type' => $indexType,
+                'id' => $id,
+            ];
             if ($indexType === '.percolator') {
                 if (!array_key_exists('body', $this->data[$indexName][$id])) {
                     throw new InvalidArgumentException('Percolator element data must contain "body" section');
                 }
-
-                $indexData = [
-                    'index' => $indexName,
-                    'type' => $this->getType($indexName),
-                    'id' => $id,
-                    'body' => $this->data[$indexName][$id]['body'],
-                ];
+                $indexData['body'] = $this->data[$indexName][$id]['body'];
                 if (array_key_exists('routing', $this->data[$indexName][$id])) {
                     $indexData = array_merge($indexData, ['routing' => $this->data[$indexName][$id]['routing']]);
                 }
-
-                $client->index($indexData);
             } else {
-                $client->index(
-                    [
-                        'index' => $indexName,
-                        'type' => $this->getType($indexName),
-                        'id' => $id,
-                        'body' => $this->data[$indexName][$id],
-                    ]
-                );
+                $indexData['body'] = $this->data[$indexName][$id];
             }
+            $client->index($indexData);
         } catch (Exception $e) {
             throw new DbOperationFailedException('Insert failed: ' . $e->getMessage());
         }
@@ -129,25 +116,20 @@ class Elasticsearch extends AbstractImplementation
         $client = static::$instance->client;
         try {
             $indexType = $this->getType($indexName);
-            if ($indexType === '.percolator') {
-                $indexData = [
-                    'index' => $indexName,
-                    'type' => $this->getType($indexName),
-                    'id' => $id,
-                ];
-                if (array_key_exists('routing', $this->data[$indexName][$id])) {
-                    $indexData = array_merge($indexData, ['routing' => $this->data[$indexName][$id]['routing']]);
-                }
-                $client->delete($indexData);
-            } else {
-                $client->delete([
-                    'index' => $indexName,
-                    'type' => $this->getType($indexName),
-                    'id' => $id,
-                ]);
+            $indexData = [
+                'index' => $indexName,
+                'type' => $indexType,
+                'id' => $id,
+            ];
+            if ($indexType === '.percolator' && array_key_exists('routing', $this->data[$indexName][$id])) {
+                $indexData['routing'] = $this->data[$indexName][$id]['routing'];
             }
+            $client->delete($indexData);
         } catch (Exception $e) {
-            throw new DbOperationFailedException('Delete failed: ' . $e->getMessage());
+            // allow calling delete fro non-existent record
+            if ($e->getCode() !== 404) {
+                throw new DbOperationFailedException('Delete failed: ' . $e->getMessage());
+            }
         }
 
         // make changes reflect immediately

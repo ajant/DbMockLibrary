@@ -48,12 +48,14 @@ Auto-load the library:
 use DbMockLibrary/DbMockLibrary
 ```
 
-As of now MySQL and MongoDb databases have been implemented.
+As of now MySQL, MongoDb and Elasticsearch databases have been implemented.
 
 Quick start
 ===========
-Here's the example, how to use the library for testing MySQL features of the application
+Here's the example, how to use the library for testing DB features of the application.
 
+**MySQL**
+-
 Bootstrapping:
 ```php
 ...
@@ -91,5 +93,105 @@ Test tear down:
 ...
 // removes all rows inserted during set up phase
 MySQL::getInstance()->cleanUp();
+...
+```
+**Elasticsearch**
+-
+Note:
+
+It is presumed that all indexes and mappings for records that are to be used in testing are already in Elasticsearch database.
+
+Bootstrapping:
+
+```php
+...
+// 4 indexes, 2 rows each
+// 4th index is percolator index
+$data = [
+    'index_1' => [
+        0 => ['foo' => 20, 'id' => -1],
+        1 => ['foo' => 50, 'id' => -2],
+    ],
+    'index_2' => [
+        0 => ['bar' => 30, 'id' => -1, 'index_1_id' => -1],
+        1 => ['bar' => 10, 'id' => -2, 'index_1_id' => -2],
+    ],
+    'index_3' => [
+        'record1' => ['field1' => 'value11', 'field2' => 'value12'],
+        'record2' => ['field1' => 'value21', 'field2' => 'value22'],
+    ],
+    'index_4' => [
+        'percolatorRecord1' => [
+            'routing' => 0,
+            'body' => [
+                'query' => [
+                    'bool' => [
+                        'minimum_number_should_match' => 1,
+                        'should' => [
+                            [
+                                'match' => [
+                                    'someField' => [
+                                        'query' => 'foo',
+                                        'operator' => 'and'
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+        'percolatorRecord2' => [
+            'routing' => 1,
+            'body' => [
+                'query' => [
+                    'terms' => [
+                        'someField' => [
+                            'someValue'
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+];
+// index_1_id is foreign key, referencing id column
+$dependencies = [
+    [
+        DependencyHandler::DEPENDENT => ['index_2' => 'index_1_id'],
+        DependencyHandler::ON        => ['index_1' => 'id'],
+    ],
+];
+$indexTypes = [
+    'index_1' => 'someType',
+    'index_2' => 'someType',
+    'index_3' => 'someType',
+    'index_4' => '.percolator',
+];
+// initialize Elasticsearch
+$client = \Elasticsearch\ClientBuilder::create()->setHosts(['http://localhost:9200'])->build();
+Elasticsearch::initElasticsearch($client, $data, $dependencies, $indexTypes);
+...
+```
+Test set up features:
+```php
+...
+// inserts both rows of index_2 and both rows of index_1, because
+Elasticsearch::getInstance()->setUp(['index_2' => [0, 1]]);
+// inserts all indexes
+Elasticsearch::getInstance()->setUp();
+// inserts only index_1
+Elasticsearch::getInstance()->setUp(['index_1']);
+...
+```
+Test tear down features:
+```php
+...
+// removes all rows inserted during set up phase, including dependencies
+Elasticsearch::getInstance()->cleanUp();
+// removes all indexes
+Elasticsearch::getInstance()->tearDown();
+// removes only index_1
+Elasticsearch::getInstance()->tearDown(['index_1']);
 ...
 ```

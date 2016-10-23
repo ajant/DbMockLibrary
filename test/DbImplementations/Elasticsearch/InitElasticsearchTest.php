@@ -26,7 +26,7 @@ class InitElasticsearchTest extends ElasticsearchTestCase
         ];
 
         // invoke logic
-        Elasticsearch::initElasticsearch($this->hosts, $dataArray, [], $indexTypes);
+        Elasticsearch::initElasticsearch($this->client, $dataArray, [], $indexTypes);
 
         // prepare
         $reflection = new ReflectionClass(Elasticsearch::class);
