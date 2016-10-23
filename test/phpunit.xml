@@ -5,7 +5,7 @@
 	</testsuite>
 	<filter>
 		<whitelist>
-			<directory suffix=".php">../src</directory>
+			<directory suffix=".php">./</directory>
 		</whitelist>
 	</filter>
 </phpunit>
