@@ -26,11 +26,11 @@ class InitElasticsearchTest extends ElasticsearchTestCase
         Elasticsearch::initElasticsearch($this->client, $dataArray, [], $indexTypes);
 
         // prepare
-        $reflection = new ReflectionClass(Elasticsearch::class);
+        $reflection = new ReflectionClass('\DbMockLibrary\DbImplementations\Elasticsearch');
         $staticProperties = $reflection->getStaticProperties();
 
         // test
-        $this->assertInstanceOf(Elasticsearch::class, $staticProperties['instance']);
+        $this->assertInstanceOf('\DbMockLibrary\DbImplementations\Elasticsearch', $staticProperties['instance']);
         $this->assertEquals($dataArray, $staticProperties['initialData']);
 
         // prepare

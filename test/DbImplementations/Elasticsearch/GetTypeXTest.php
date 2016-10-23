@@ -2,8 +2,6 @@
 
 namespace DbMockLibrary\Test\DbImplementations\Elasticsearch;
 
-use DbMockLibrary\DbImplementations\Elasticsearch;
-use InvalidArgumentException;
 use ReflectionClass;
 
 class GetTypeXTest extends ElasticsearchTestCase
@@ -12,11 +10,11 @@ class GetTypeXTest extends ElasticsearchTestCase
     {
         // prepare
         $undefinedIndex = 'undefinedIndex';
-        $this->setExpectedException(InvalidArgumentException::class, "Undefined type for index $undefinedIndex");
+        $this->setExpectedException('\InvalidArgumentException', "Undefined type for index $undefinedIndex");
         $indexTypes = [
             $this->testIndex => self::REGULAR_TYPE,
         ];
-        $reflection = new ReflectionClass(Elasticsearch::class);
+        $reflection = new ReflectionClass('\DbMockLibrary\DbImplementations\Elasticsearch');
         $instance = $reflection->newInstanceWithoutConstructor();
         $this->setPropertyByReflection($instance, 'instance', $instance);
         $this->setPropertyByReflection($instance, 'indexTypes', $indexTypes);

@@ -1,10 +1,6 @@
 <?php
 namespace DbMockLibrary\Test\DbImplementations\Elasticsearch;
 
-use DbMockLibrary\DbImplementations\Elasticsearch;
-use DbMockLibrary\Exceptions\DbOperationFailedException;
-use Elasticsearch\Client;
-use Exception;
 use Mockery;
 use ReflectionClass;
 
@@ -21,12 +17,12 @@ class InsertXTest extends ElasticsearchTestCase
     public function testInsertFailed($indexType)
     {
         // prepare
-        $this->setExpectedException(DbOperationFailedException::class, 'Insert failed');
-        $reflection = new ReflectionClass(Elasticsearch::class);
+        $this->setExpectedException('\DbMockLibrary\Exceptions\DbOperationFailedException', 'Insert failed');
+        $reflection = new ReflectionClass('\DbMockLibrary\DbImplementations\Elasticsearch');
         $instance = $reflection->newInstanceWithoutConstructor();
         $this->setPropertyByReflection($instance, 'instance', $instance);
         $this->setPropertyByReflection($instance, 'data', [$this->testIndex => [[]]]);
-        $mockClient = Mockery::mock(Client::class);
+        $mockClient = Mockery::mock('\Elasticsearch\Client');
         if ($indexType === self::REGULAR_TYPE) {
             $mockClient->shouldReceive('index')->times(1)->with(
                 [
@@ -35,7 +31,7 @@ class InsertXTest extends ElasticsearchTestCase
                     'id' => 0,
                     'body' => [],
                 ]
-            )->andThrow(Exception::class, 'exception');
+            )->andThrow('\Exception', 'exception');
         }
         $this->setPropertyByReflection($instance, 'client', $mockClient);
         $this->setPropertyByReflection($instance, 'indexTypes', [$this->testIndex => $indexType]);

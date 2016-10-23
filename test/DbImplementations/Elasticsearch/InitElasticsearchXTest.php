@@ -3,11 +3,9 @@
 namespace DbMockLibrary\Test\DbImplementations\Elasticsearch;
 
 use DbMockLibrary\DbImplementations\Elasticsearch;
-use DbMockLibrary\Exceptions\AlreadyInitializedException;
 use DbMockLibrary\Test\TestCase;
 use Elasticsearch\Client;
 use Elasticsearch\ClientBuilder;
-use UnexpectedValueException;
 
 class InitElasticsearchXTest extends TestCase
 {
@@ -34,7 +32,7 @@ class InitElasticsearchXTest extends TestCase
     {
         // prepare
         Elasticsearch::init();
-        $this->setExpectedException(AlreadyInitializedException::class, 'Elasticsearch library already initialized');
+        $this->setExpectedException('\DbMockLibrary\Exceptions\AlreadyInitializedException', 'Elasticsearch library already initialized');
 
         // invoke logic
         Elasticsearch::initElasticsearch($this->client, [], [], []);
@@ -44,7 +42,7 @@ class InitElasticsearchXTest extends TestCase
     {
         // prepare
         $data = [0 => 'index1'];
-        $this->setExpectedException(UnexpectedValueException::class, 'Invalid indices names');
+        $this->setExpectedException('\UnexpectedValueException', 'Invalid indices names');
 
         // invoke logic
         Elasticsearch::initElasticsearch($this->client, $data, [], []);
