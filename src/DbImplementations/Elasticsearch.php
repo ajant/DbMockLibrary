@@ -47,14 +47,10 @@ class Elasticsearch extends AbstractImplementation
             if ($initialData !== [] && !SimpleArrayLibrary::isAssociative($initialData)) {
                 throw new UnexpectedValueException('Invalid indices names');
             }
-
             static::$initialData = $initialData;
             static::initDependencyHandler($initialData, $dependencies);
             static::$instance->client = $client;
             static::$indexTypes = $indexTypes;
-
-            // make changes reflect immediately
-            static::$instance->client->indices()->refresh();
         } else {
             throw new AlreadyInitializedException('Elasticsearch library already initialized');
         }

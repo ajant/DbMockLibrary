@@ -20,9 +20,7 @@ class ElasticsearchTestCase extends TestCase
     /**
      * @var string $hosts
      */
-    protected $hosts = [
-        'http://localhost:9200',
-    ];
+    protected $hosts = ['http://localhost:9200'];
 
     /**
      * @var string $testIndex

@@ -7,9 +7,6 @@ use ReflectionClass;
 
 class InitElasticsearchTest extends ElasticsearchTestCase
 {
-    /**
-     * @return void
-     */
     public function testInitialization()
     {
         // prepare

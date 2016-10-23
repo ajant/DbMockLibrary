@@ -14,6 +14,8 @@ class InsertXTest extends ElasticsearchTestCase
     const PERCOLATOR_TYPE = '.percolator';
 
     /**
+     * @param $indexType
+     *
      * @dataProvider getData
      */
     public function testInsertFailed($indexType)
@@ -42,6 +44,9 @@ class InsertXTest extends ElasticsearchTestCase
         $this->invokeMethodByReflection($instance, 'insert', [$this->testIndex, 0]);
     }
 
+    /**
+     * @return array
+     */
     public function getData()
     {
         return [

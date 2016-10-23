@@ -8,6 +8,10 @@ use ReflectionClass;
 class DeleteTest extends ElasticsearchTestCase
 {
     /**
+     * @param $indexType
+     * @param array $mappings
+     * @param array $data
+     *
      * @dataProvider getData
      */
     public function testDeletion($indexType, array $mappings, array $data)
@@ -17,6 +21,7 @@ class DeleteTest extends ElasticsearchTestCase
             $this->client->indices()->putMapping($mappings);
         }
         $this->client->index($data);
+        $this->client->indices()->refresh();
         if ($indexType === self::PERCOLATOR_TYPE) {
             unset($data['index']);
             $data = [$this->testIndex => [1 => $data]];
@@ -51,6 +56,9 @@ class DeleteTest extends ElasticsearchTestCase
         $this->assertEquals(0, $afterCount['count']);
     }
 
+    /**
+     * @return array
+     */
     public function getData()
     {
         return [
@@ -72,6 +80,7 @@ class DeleteTest extends ElasticsearchTestCase
             [
                 'indexType' => self::PERCOLATOR_TYPE,
                 'mappings' => [
+                    'index' => $this->testIndex,
                     'type' => self::PERCOLATOR_TYPE,
                     'body' => [
                         "properties" => [
@@ -99,6 +108,7 @@ class DeleteTest extends ElasticsearchTestCase
             [
                 'indexType' => self::PERCOLATOR_TYPE,
                 'mappings' => [
+                    'index' => $this->testIndex,
                     'type' => self::PERCOLATOR_TYPE,
                     'body' => [
                         "properties" => [

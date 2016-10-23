@@ -13,6 +13,10 @@ class InsertTest extends ElasticsearchTestCase
     private $indexTypes;
 
     /**
+     * @param $indexType
+     * @param array $mapping
+     * @param array $data
+     *
      * @dataProvider getData
      */
     public function testInsertion($indexType, array $mapping, array $data)
@@ -22,9 +26,7 @@ class InsertTest extends ElasticsearchTestCase
             $this->testIndex => $indexType,
         ];
 
-        Elasticsearch::initElasticsearch($this->client, [
-            $this->testIndex => $data,
-        ], [], $this->indexTypes);
+        Elasticsearch::initElasticsearch($this->client, [$this->testIndex => $data], [], $this->indexTypes);
 
         if ($mapping !== []) {
             $this->client->indices()->putMapping($mapping);
@@ -74,6 +76,9 @@ class InsertTest extends ElasticsearchTestCase
         $this->assertEquals(1, $afterCount['count']);
     }
 
+    /**
+     * @return array
+     */
     public function getData()
     {
         return [
@@ -91,6 +96,7 @@ class InsertTest extends ElasticsearchTestCase
             [
                 'type' => self::PERCOLATOR_TYPE,
                 'mapping' => [
+                    'index' => $this->testIndex,
                     'type' => self::PERCOLATOR_TYPE,
                     'body' => [
                         "properties" => [
@@ -117,6 +123,7 @@ class InsertTest extends ElasticsearchTestCase
             [
                 'type' => self::PERCOLATOR_TYPE,
                 'mapping' => [
+                    'index' => $this->testIndex,
                     'type' => self::PERCOLATOR_TYPE,
                     'body' => [
                         "properties" => [
