@@ -24,7 +24,7 @@ class Elasticsearch extends AbstractImplementation
     protected static $initialData;
 
     /**
-     * @var  array $indexTypes
+     * @var array $indexTypes
      */
     protected static $indexTypes;
 
@@ -91,9 +91,7 @@ class Elasticsearch extends AbstractImplementation
         } catch (Exception $e) {
             throw new DbOperationFailedException('Insert failed: ' . $e->getMessage());
         }
-
         $this->recordInsert($indexName, $id);
-
         // make changes reflect immediately
         $this->client->indices()->refresh();
     }
@@ -127,14 +125,14 @@ class Elasticsearch extends AbstractImplementation
                 throw new DbOperationFailedException('Delete failed: ' . $e->getMessage());
             }
         }
-
         // make changes reflect immediately
         $this->client->indices()->refresh();
     }
 
     /**
      * @param $indexName
-     * @return mixed
+     *
+     * @return string
      * @throws InvalidArgumentException
      */
     private function getType($indexName)
