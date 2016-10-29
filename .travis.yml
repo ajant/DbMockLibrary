@@ -11,6 +11,7 @@ before_script:
 
 services:
   - mongodb
+  - elasticsearch
 
 script:
   - vendor/phpunit/phpunit/phpunit --coverage-clover build/logs/clover.xml test/
