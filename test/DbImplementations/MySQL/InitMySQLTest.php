@@ -4,7 +4,7 @@ namespace DbMockLibrary\Test\DbImplementations\MySQL;
 use DbMockLibrary\DbImplementations\MySQL;
 use DbMockLibrary\Test\TestCase;
 
-class InitTest extends TestCase
+class InitMySQLTest extends TestCase
 {
     /**
      * @var \PDO $pdo

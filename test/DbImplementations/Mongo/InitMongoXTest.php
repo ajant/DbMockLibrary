@@ -4,7 +4,7 @@ namespace DbMockLibrary\Test\DbImplementations\Mongo;
 use DbMockLibrary\DbImplementations\Mongo;
 use DbMockLibrary\Test\TestCase;
 
-class InitXTest extends TestCase
+class InitMongoXTest extends TestCase
 {
     public function tearDown()
     {
