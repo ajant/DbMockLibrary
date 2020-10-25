@@ -4,7 +4,7 @@ namespace DbMockLibrary\Test\MockMethodCalls;
 use DbMockLibrary\MockMethodCalls;
 use DbMockLibrary\Test\TestCase;
 
-class WasCalledXTest extends TestCase
+class WasCalledCountXTest extends TestCase
 {
     /**
      * @return void
